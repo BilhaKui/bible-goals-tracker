@@ -220,6 +220,7 @@
             border-radius: 10px;
             margin-bottom: 15px;
             border-left: 4px solid #667eea;
+            position: relative;
         }
 
         .goal-title {
@@ -246,6 +247,31 @@
             margin-top: 8px;
         }
 
+        .goal-date {
+            color: #999;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
         .empty-state {
             text-align: center;
             padding: 40px;
@@ -267,6 +293,16 @@
         .nav-links a:hover {
             text-decoration: underline;
         }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
     </style>
 </head>
 
@@ -284,6 +320,8 @@
                     <br><strong>— Philippians 3:14 (NKJV)</strong>
                 </p>
             </div>
+
+            <div id="successMessage" class="success-message"></div>
 
             <form id="goalForm">
                 <div class="form-group">
@@ -352,12 +390,17 @@
 
         <div class="nav-links">
             <a href="index.html">← Home</a>
-            <a href="login.html">Login</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="signin.html">Sign In</a>
         </div>
     </div>
 
     <script>
-        let goals = [];
+        // Load goals from localStorage when page loads
+        let goals = JSON.parse(localStorage.getItem('bibleGoals')) || [];
+
+        // Display goals on page load
+        displayGoals();
 
         document.getElementById('goalForm').addEventListener('submit', function (e) {
             e.preventDefault();
@@ -372,11 +415,20 @@
                 createdAt: new Date().toLocaleDateString()
             };
 
+            // Add goal to array
             goals.push(goal);
+
+            // Save to localStorage
+            localStorage.setItem('bibleGoals', JSON.stringify(goals));
+
+            // Display updated goals
             displayGoals();
+
+            // Reset form
             resetForm();
 
-            alert('✓ Goal saved successfully!');
+            // Show success message
+            showSuccessMessage('✓ Goal saved successfully!');
         });
 
         function displayGoals() {
@@ -389,21 +441,46 @@
 
             goalsList.innerHTML = goals.map(goal => `
                 <div class="goal-item">
+                    <button class="delete-btn" onclick="deleteGoal(${goal.id})">Delete</button>
                     <div class="goal-title">${goal.title}</div>
                     ${goal.scripture ? `<div class="goal-scripture">📖 ${goal.scripture}</div>` : ''}
                     ${goal.description ? `<p style="color: #666; font-size: 14px; margin-top: 8px;">${goal.description}</p>` : ''}
                     <div style="margin-top: 10px;">
                         <span class="goal-category">${goal.category}</span>
-                        ${goal.targetDate ? `<span style="color: #999; font-size: 12px; margin-left: 10px;">Target: ${goal.targetDate}</span>` : ''}
+                        ${goal.targetDate ? `<span class="goal-date">Target: ${goal.targetDate}</span>` : ''}
+                        <span class="goal-date">Created: ${goal.createdAt}</span>
                     </div>
                 </div>
             `).join('');
         }
 
+        function deleteGoal(id) {
+            if (confirm('Are you sure you want to delete this goal?')) {
+                // Remove goal from array
+                goals = goals.filter(goal => goal.id !== id);
+
+                // Update localStorage
+                localStorage.setItem('bibleGoals', JSON.stringify(goals));
+
+                // Refresh display
+                displayGoals();
+
+                showSuccessMessage('✓ Goal deleted successfully!');
+            }
+        }
+
         function resetForm() {
             document.getElementById('goalForm').reset();
         }
+
+        function showSuccessMessage(message) {
+            const msgBox = document.getElementById('successMessage');
+            msgBox.textContent = message;
+            msgBox.style.display = 'block';
+
+            setTimeout(() => {
+                msgBox.style.display = 'none';
+            }, 3000);
+        }
     </script>
 </body>
-
-</html>
