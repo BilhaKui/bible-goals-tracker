@@ -6,6 +6,139 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bible Verse Lookup - Bible Goals Tracker</title>
     <style>
+        /* Navigation Menu Styles */
+        .top-nav {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            margin-bottom: 30px;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .nav-logo-icon {
+            font-size: 28px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #666;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 8px 0;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: #667eea;
+        }
+
+        .nav-link.active {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #667eea;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: white;
+                flex-direction: column;
+                padding: 30px;
+                gap: 20px;
+                transition: left 0.3s ease;
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-link {
+                width: 100%;
+                padding: 15px;
+                text-align: center;
+                border-bottom: 1px solid #f0f0f0;
+            }
+
+            .nav-btn {
+                width: 100%;
+                text-align: center;
+                padding: 15px;
+            }
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -27,7 +160,7 @@
         .header {
             background: white;
             border-radius: 20px;
-            padding: 30px;
+            padding: 40px;
             margin-bottom: 30px;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -36,12 +169,13 @@
         h1 {
             color: #333;
             font-size: 36px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .subtitle {
             color: #666;
-            font-size: 16px;
+            font-size: 18px;
+            line-height: 1.6;
         }
 
         .search-card {
@@ -240,22 +374,6 @@
             color: #999;
         }
 
-        .nav-links {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 14px;
-        }
-
-        .nav-links a:hover {
-            text-decoration: underline;
-        }
-
         .error-message {
             background: #ffebee;
             color: #c62828;
@@ -267,6 +385,27 @@
 </head>
 
 <body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="nav-logo-icon">📖</span>
+                <span>Bible Goals Tracker</span>
+            </a>
+
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+
+            <div class="nav-links" id="navLinks">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="goals.html" class="nav-link">My Goals</a>
+                <a href="declarations.html" class="nav-link">Declarations</a>
+                <a href="bible-lookup.html" class="nav-link">Bible Lookup</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+                <button id="authButton" class="nav-btn" onclick="handleAuth()">Sign In</button>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
         <div class="header">
             <h1>📖 Bible Verse Lookup</h1>
@@ -308,78 +447,223 @@
 
             <div class="action-buttons">
                 <button class="btn-action" onclick="copyVerse()">📋 Copy Verse</button>
-                <button class="btn-action" onclick="addToGoals()">➕ Add to Goals</button>
+                <button class="btn-action" onclick="addToDeclarations()">✨ Add to Declarations</button>
                 <button class="btn-action" onclick="searchAnother()">🔍 Search Another</button>
             </div>
-        </div>
-
-        <div class="nav-links">
-            <a href="index.html">← Home</a>
-            <a href="goals.html">My Goals</a>
-            <a href="login.html">Login</a>
         </div>
     </div>
 
     <script>
-        // Sample Bible verses database (in a real app, this would connect to a Bible API)
-        const sampleVerses = {
-            'john 3:16': {
-                kjv: 'For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.',
-                nkjv: 'For God so loved the world that He gave His only begotten Son, that whoever believes in Him should not perish but have everlasting life.',
-                reference: 'John 3:16',
-                words: [
-                    { original: 'ἀγαπάω', transliteration: 'agapaō', definition: 'To love with divine love; unconditional, sacrificial love (Strong\'s G25)' },
-                    { original: 'κόσμος', transliteration: 'kosmos', definition: 'World, universe; the created order; humanity (Strong\'s G2889)' },
-                    { original: 'πιστεύω', transliteration: 'pisteuō', definition: 'To believe, have faith, trust in; to be convinced of (Strong\'s G4100)' }
-                ]
-            },
-            'psalm 23:1': {
-                kjv: 'The LORD is my shepherd; I shall not want.',
-                nkjv: 'The LORD is my shepherd; I shall not want.',
-                reference: 'Psalm 23:1',
-                words: [
-                    { original: 'יְהוָה', transliteration: 'YHWH (Yahweh)', definition: 'The LORD; the covenant name of God; "I AM WHO I AM" (Strong\'s H3068)' },
-                    { original: 'רָעָה', transliteration: 'ra\'ah', definition: 'To shepherd, tend, pasture; to feed, lead, guide (Strong\'s H7462)' },
-                    { original: 'חָסֵר', transliteration: 'chaser', definition: 'To lack, be without, decrease; to be in need (Strong\'s H2637)' }
-                ]
-            },
-            'proverbs 3:5-6': {
-                kjv: 'Trust in the LORD with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths.',
-                nkjv: 'Trust in the LORD with all your heart, And lean not on your own understanding; In all your ways acknowledge Him, And He shall direct your paths.',
-                reference: 'Proverbs 3:5-6',
-                words: [
-                    { original: 'בָּטַח', transliteration: 'batach', definition: 'To trust, be confident, secure; to put confidence in (Strong\'s H982)' },
-                    { original: 'לֵב', transliteration: 'leb', definition: 'Heart; inner man, mind, will, understanding (Strong\'s H3820)' },
-                    { original: 'יָשַׁר', transliteration: 'yashar', definition: 'To be straight, right, direct; to make level or smooth (Strong\'s H3474)' }
-                ]
-            },
-            'philippians 4:13': {
-                kjv: 'I can do all things through Christ which strengtheneth me.',
-                nkjv: 'I can do all things through Christ who strengthens me.',
-                reference: 'Philippians 4:13',
-                words: [
-                    { original: 'ἰσχύω', transliteration: 'ischuō', definition: 'To have strength, be strong, be able; to be powerful (Strong\'s G2480)' },
-                    { original: 'ἐνδυναμόω', transliteration: 'endunamoō', definition: 'To strengthen, make strong, empower; to fill with power (Strong\'s G1743)' },
-                    { original: 'Χριστός', transliteration: 'Christos', definition: 'Christ, Messiah; the Anointed One (Strong\'s G5547)' }
-                ]
-            },
-            'romans 8:28': {
-                kjv: 'And we know that all things work together for good to them that love God, to them who are the called according to his purpose.',
-                nkjv: 'And we know that all things work together for good to those who love God, to those who are the called according to His purpose.',
-                reference: 'Romans 8:28',
-                words: [
-                    { original: 'συνεργέω', transliteration: 'sunergeō', definition: 'To work together, cooperate; to be a fellow worker (Strong\'s G4903)' },
-                    { original: 'ἀγαθός', transliteration: 'agathos', definition: 'Good, beneficial, excellent; morally good (Strong\'s G18)' },
-                    { original: 'πρόθεσις', transliteration: 'prothesis', definition: 'Purpose, plan, intention; predetermined counsel (Strong\'s G4286)' }
-                ]
-            }
-        };
+        // Navigation functions
+        function updateAuthButton() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const authButton = document.getElementById('authButton');
 
+            if (isLoggedIn) {
+                authButton.textContent = 'Sign Out';
+            } else {
+                authButton.textContent = 'Sign In';
+            }
+        }
+
+        function handleAuth() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+            if (isLoggedIn) {
+                if (confirm('Are you sure you want to sign out?')) {
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('userName');
+                    window.location.href = 'index.html';
+                }
+            } else {
+                window.location.href = 'signin.html';
+            }
+        }
+
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function (event) {
+            const navLinks = document.getElementById('navLinks');
+            const mobileBtn = document.querySelector('.mobile-menu-btn');
+
+            if (!navLinks.contains(event.target) && !mobileBtn.contains(event.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', function () {
+            updateAuthButton();
+
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            navLinks.forEach(link => {
+                const linkPage = link.getAttribute('href');
+                if (linkPage === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Bible API Integration - Using getbible.net (free, no key needed)
         let currentTranslation = 'KJV';
         let currentVerse = null;
 
-        function searchVerse() {
-            const input = document.getElementById('verseInput').value.trim().toLowerCase();
+        // Embedded Strong's Concordance Database (Most Common Words)
+        const strongsDatabase = {
+            // Greek Words (New Testament)
+            'G25': { word: 'ἀγαπάω', transliteration: 'agapaō', definition: 'To love with divine, unconditional love; the highest form of love' },
+            'G26': { word: 'ἀγάπη', transliteration: 'agapē', definition: 'Divine love, charity; unconditional love from God' },
+            'G40': { word: 'ἅγιος', transliteration: 'hagios', definition: 'Holy, sacred, set apart; morally pure' },
+            'G101': { word: 'ἀδύνατος', transliteration: 'adunatos', definition: 'Impossible, unable, powerless' },
+            'G225': { word: 'ἀλήθεια', transliteration: 'alētheia', definition: 'Truth, reality; the embodiment of truth' },
+            'G266': { word: 'ἁμαρτία', transliteration: 'hamartia', definition: 'Sin, offense; missing the mark' },
+            'G444': { word: 'ἄνθρωπος', transliteration: 'anthrōpos', definition: 'Man, human being, person' },
+            'G544': { word: 'ἀπειθέω', transliteration: 'apeitheō', definition: 'To disbelieve, disobey, be disobedient' },
+            'G1342': { word: 'δίκαιος', transliteration: 'dikaios', definition: 'Righteous, just; in right standing with God' },
+            'G1343': { word: 'δικαιοσύνη', transliteration: 'dikaiosunē', definition: 'Righteousness, justice; right standing before God' },
+            'G1411': { word: 'δύναμις', transliteration: 'dunamis', definition: 'Power, strength, ability; miraculous power' },
+            'G1680': { word: 'ἐλπίς', transliteration: 'elpis', definition: 'Hope, expectation, confidence' },
+            'G1743': { word: 'ἐνδυναμόω', transliteration: 'endunamoō', definition: 'To strengthen, empower; to make strong' },
+            'G2041': { word: 'ἔργον', transliteration: 'ergon', definition: 'Work, deed, action; that which is done' },
+            'G2222': { word: 'ζωή', transliteration: 'zōē', definition: 'Life, eternal life; the life of God' },
+            'G2316': { word: 'Θεός', transliteration: 'Theos', definition: 'God, deity; the Supreme Being' },
+            'G2424': { word: 'Ἰησοῦς', transliteration: 'Iēsous', definition: 'Jesus; Yahweh is salvation' },
+            'G2480': { word: 'ἰσχύω', transliteration: 'ischuō', definition: 'To be strong, have power, be able' },
+            'G2540': { word: 'καιρός', transliteration: 'kairos', definition: 'Time, season, opportunity; the right time' },
+            'G2588': { word: 'καρδία', transliteration: 'kardia', definition: 'Heart; the center of life, will, and personality' },
+            'G2889': { word: 'κόσμος', transliteration: 'kosmos', definition: 'World, universe, humanity; the created order' },
+            'G3056': { word: 'λόγος', transliteration: 'logos', definition: 'Word, saying, speech; the divine Word' },
+            'G3340': { word: 'μετανοέω', transliteration: 'metanoeō', definition: 'To repent, change one\'s mind; turn from sin' },
+            'G4100': { word: 'πιστεύω', transliteration: 'pisteuō', definition: 'To believe, have faith, trust in' },
+            'G4102': { word: 'πίστις', transliteration: 'pistis', definition: 'Faith, trust, belief; fidelity' },
+            'G4151': { word: 'πνεῦμα', transliteration: 'pneuma', definition: 'Spirit, wind, breath; the Holy Spirit' },
+            'G4982': { word: 'σώζω', transliteration: 'sōzō', definition: 'To save, deliver, rescue; to make whole' },
+            'G5485': { word: 'χάρις', transliteration: 'charis', definition: 'Grace, favor; unmerited divine favor' },
+            'G5547': { word: 'Χριστός', transliteration: 'Christos', definition: 'Christ, Messiah; the Anointed One' },
+
+            // Hebrew Words (Old Testament)
+            'H136': { word: 'אֲדֹנָי', transliteration: 'Adonai', definition: 'Lord, Master; sovereign ruler' },
+            'H157': { word: 'אָהַב', transliteration: 'ahab', definition: 'To love; to have affection for' },
+            'H410': { word: 'אֵל', transliteration: 'El', definition: 'God, mighty one; the strong one' },
+            'H430': { word: 'אֱלֹהִים', transliteration: 'Elohim', definition: 'God, gods; plural form showing majesty' },
+            'H539': { word: 'אָמַן', transliteration: 'aman', definition: 'To believe, trust, have faith; to be faithful' },
+            'H982': { word: 'בָּטַח', transliteration: 'batach', definition: 'To trust, be confident, feel secure' },
+            'H1285': { word: 'בְּרִית', transliteration: 'berith', definition: 'Covenant, agreement; a binding promise' },
+            'H2617': { word: 'חֶסֶד', transliteration: 'chesed', definition: 'Lovingkindness, mercy; covenant loyalty' },
+            'H2421': { word: 'חָיָה', transliteration: 'chayah', definition: 'To live, have life, remain alive' },
+            'H2637': { word: 'חָסֵר', transliteration: 'chaser', definition: 'To lack, be without, decrease' },
+            'H3068': { word: 'יְהוָה', transliteration: 'YHWH', definition: 'The LORD; the covenant name of God, "I AM"' },
+            'H3444': { word: 'יְשׁוּעָה', transliteration: 'yeshuah', definition: 'Salvation, deliverance, rescue' },
+            'H3467': { word: 'יָשַׁע', transliteration: 'yasha', definition: 'To save, deliver, rescue; to be saved' },
+            'H3474': { word: 'יָשַׁר', transliteration: 'yashar', definition: 'To be straight, right, pleasing; upright' },
+            'H3820': { word: 'לֵב', transliteration: 'leb', definition: 'Heart, mind, will; inner person' },
+            'H4428': { word: 'מֶלֶךְ', transliteration: 'melek', definition: 'King, ruler, sovereign' },
+            'H4940': { word: 'מִשְׁפָּחָה', transliteration: 'mishpachah', definition: 'Family, clan, tribe' },
+            'H5315': { word: 'נֶפֶשׁ', transliteration: 'nephesh', definition: 'Soul, life, person; the inner being' },
+            'H6662': { word: 'צַדִּיק', transliteration: 'tsaddiq', definition: 'Righteous, just; in right standing' },
+            'H6666': { word: 'צְדָקָה', transliteration: 'tsedaqah', definition: 'Righteousness, justice; right actions' },
+            'H7307': { word: 'רוּחַ', transliteration: 'ruach', definition: 'Spirit, wind, breath; the Spirit of God' },
+            'H7462': { word: 'רָעָה', transliteration: 'raah', definition: 'To shepherd, tend, pasture; to feed and lead' },
+            'H7965': { word: 'שָׁלוֹם', transliteration: 'shalom', definition: 'Peace, wholeness, completeness; well-being' },
+            'H8085': { word: 'שָׁמַע', transliteration: 'shama', definition: 'To hear, listen, obey; to understand' }
+        };
+
+        // Parse verse reference (e.g., "John 3:16" -> book, chapter, verse)
+        function parseReference(input) {
+            // Handle various formats
+            const pattern = /^(\d?\s?[a-zA-Z]+)\s+(\d+):(\d+)(?:-(\d+))?$/i;
+            const match = input.trim().match(pattern);
+
+            if (!match) return null;
+
+            return {
+                book: match[1].trim(),
+                chapter: match[2],
+                verseStart: match[3],
+                verseEnd: match[4] || match[3]
+            };
+        }
+
+        // Convert book name to API book ID
+        function getBookId(bookName) {
+            const bookMap = {
+                'genesis': 'GEN', 'gen': 'GEN',
+                'exodus': 'EXO', 'exo': 'EXO',
+                'leviticus': 'LEV', 'lev': 'LEV',
+                'numbers': 'NUM', 'num': 'NUM',
+                'deuteronomy': 'DEU', 'deut': 'DEU', 'deu': 'DEU',
+                'joshua': 'JOS', 'josh': 'JOS', 'jos': 'JOS',
+                'judges': 'JDG', 'judg': 'JDG', 'jdg': 'JDG',
+                'ruth': 'RUT',
+                '1 samuel': '1SA', '1samuel': '1SA', '1 sam': '1SA', '1sam': '1SA',
+                '2 samuel': '2SA', '2samuel': '2SA', '2 sam': '2SA', '2sam': '2SA',
+                '1 kings': '1KI', '1kings': '1KI', '1 ki': '1KI', '1ki': '1KI',
+                '2 kings': '2KI', '2kings': '2KI', '2 ki': '2KI', '2ki': '2KI',
+                '1 chronicles': '1CH', '1chronicles': '1CH', '1 chr': '1CH', '1chr': '1CH',
+                '2 chronicles': '2CH', '2chronicles': '2CH', '2 chr': '2CH', '2chr': '2CH',
+                'ezra': 'EZR',
+                'nehemiah': 'NEH', 'neh': 'NEH',
+                'esther': 'EST',
+                'job': 'JOB',
+                'psalm': 'PSA', 'psalms': 'PSA', 'psa': 'PSA', 'ps': 'PSA',
+                'proverbs': 'PRO', 'prov': 'PRO', 'pro': 'PRO',
+                'ecclesiastes': 'ECC', 'eccl': 'ECC', 'ecc': 'ECC',
+                'song of solomon': 'SNG', 'song': 'SNG', 'sng': 'SNG',
+                'isaiah': 'ISA', 'isa': 'ISA',
+                'jeremiah': 'JER', 'jer': 'JER',
+                'lamentations': 'LAM', 'lam': 'LAM',
+                'ezekiel': 'EZK', 'ezek': 'EZK', 'ezk': 'EZK',
+                'daniel': 'DAN', 'dan': 'DAN',
+                'hosea': 'HOS', 'hos': 'HOS',
+                'joel': 'JOL', 'joe': 'JOL',
+                'amos': 'AMO', 'amo': 'AMO',
+                'obadiah': 'OBA', 'obad': 'OBA', 'oba': 'OBA',
+                'jonah': 'JON', 'jon': 'JON',
+                'micah': 'MIC', 'mic': 'MIC',
+                'nahum': 'NAM', 'nah': 'NAM', 'nam': 'NAM',
+                'habakkuk': 'HAB', 'hab': 'HAB',
+                'zephaniah': 'ZEP', 'zeph': 'ZEP', 'zep': 'ZEP',
+                'haggai': 'HAG', 'hag': 'HAG',
+                'zechariah': 'ZEC', 'zech': 'ZEC', 'zec': 'ZEC',
+                'malachi': 'MAL', 'mal': 'MAL',
+                'matthew': 'MAT', 'matt': 'MAT', 'mat': 'MAT', 'mt': 'MAT',
+                'mark': 'MRK', 'mrk': 'MRK', 'mk': 'MRK',
+                'luke': 'LUK', 'luk': 'LUK', 'lk': 'LUK',
+                'john': 'JHN', 'jhn': 'JHN', 'jn': 'JHN',
+                'acts': 'ACT', 'act': 'ACT',
+                'romans': 'ROM', 'rom': 'ROM',
+                '1 corinthians': '1CO', '1corinthians': '1CO', '1 cor': '1CO', '1cor': '1CO',
+                '2 corinthians': '2CO', '2corinthians': '2CO', '2 cor': '2CO', '2cor': '2CO',
+                'galatians': 'GAL', 'gal': 'GAL',
+                'ephesians': 'EPH', 'eph': 'EPH',
+                'philippians': 'PHP', 'phil': 'PHP', 'php': 'PHP',
+                'colossians': 'COL', 'col': 'COL',
+                '1 thessalonians': '1TH', '1thessalonians': '1TH', '1 thess': '1TH', '1thess': '1TH',
+                '2 thessalonians': '2TH', '2thessalonians': '2TH', '2 thess': '2TH', '2thess': '2TH',
+                '1 timothy': '1TI', '1timothy': '1TI', '1 tim': '1TI', '1tim': '1TI',
+                '2 timothy': '2TI', '2timothy': '2TI', '2 tim': '2TI', '2tim': '2TI',
+                'titus': 'TIT', 'tit': 'TIT',
+                'philemon': 'PHM', 'phlm': 'PHM', 'phm': 'PHM',
+                'hebrews': 'HEB', 'heb': 'HEB',
+                'james': 'JAS', 'jas': 'JAS', 'jas': 'JAS',
+                '1 peter': '1PE', '1peter': '1PE', '1 pet': '1PE', '1pet': '1PE',
+                '2 peter': '2PE', '2peter': '2PE', '2 pet': '2PE', '2pet': '2PE',
+                '1 john': '1JN', '1john': '1JN', '1 jn': '1JN', '1jn': '1JN',
+                '2 john': '2JN', '2john': '2JN', '2 jn': '2JN', '2jn': '2JN',
+                '3 john': '3JN', '3john': '3JN', '3 jn': '3JN', '3jn': '3JN',
+                'jude': 'JUD', 'jud': 'JUD',
+                'revelation': 'REV', 'rev': 'REV'
+            };
+
+            return bookMap[bookName.toLowerCase()] || null;
+        }
+
+        async function searchVerse() {
+            const input = document.getElementById('verseInput').value.trim();
             const resultsCard = document.getElementById('resultsCard');
             const verseDisplay = document.getElementById('verseDisplay');
             const wordStudy = document.getElementById('wordStudy');
@@ -389,22 +673,72 @@
                 return;
             }
 
-            currentVerse = sampleVerses[input];
-
-            if (currentVerse) {
-                displayVerse();
-                resultsCard.style.display = 'block';
-                resultsCard.scrollIntoView({ behavior: 'smooth' });
-            } else {
+            const parsed = parseReference(input);
+            if (!parsed) {
                 verseDisplay.innerHTML = `
                     <div class="error-message">
-                        ⚠️ Verse not found in sample database. Try one of the example verses above!<br>
-                        <small style="margin-top: 10px; display: block;">In the full version, this will connect to a complete Bible API.</small>
+                        ⚠️ Invalid format. Please use format like: John 3:16, Psalm 23:1, or Romans 8:28
+                    </div>
+                `;
+                resultsCard.style.display = 'block';
+                return;
+            }
+
+            const bookId = getBookId(parsed.book);
+            if (!bookId) {
+                verseDisplay.innerHTML = `
+                    <div class="error-message">
+                        ⚠️ Book "${parsed.book}" not recognized. Please check spelling.
+                    </div>
+                `;
+                resultsCard.style.display = 'block';
+                return;
+            }
+
+            // Show loading
+            verseDisplay.innerHTML = '<div class="loading">🔍 Searching Bible...</div>';
+            wordStudy.innerHTML = '';
+            resultsCard.style.display = 'block';
+            resultsCard.scrollIntoView({ behavior: 'smooth' });
+
+            try {
+                // Use GetBible API (free, no key needed)
+                const translation = currentTranslation.toLowerCase();
+                const url = `https://getbible.net/json?passage=${bookId}${parsed.chapter}:${parsed.verseStart}&version=${translation}`;
+
+                const response = await fetch(url);
+                const text = await response.text();
+
+                // Remove JSONP wrapper
+                const jsonText = text.replace(/^[^{]*/, '').replace(/[^}]*$/, '');
+                const data = JSON.parse(jsonText);
+
+                const book = data.book[0];
+                const chapter = book.chapter[parsed.chapter];
+                const verse = chapter.verse[parsed.verseStart];
+
+                if (!verse) {
+                    throw new Error('Verse not found');
+                }
+
+                currentVerse = {
+                    text: verse.verse,
+                    reference: `${book.book_name} ${parsed.chapter}:${parsed.verseStart}`,
+                    bookName: book.book_name
+                };
+
+                displayVerse();
+                resultsCard.scrollIntoView({ behavior: 'smooth' });
+
+            } catch (error) {
+                console.error('Error details:', error);
+                verseDisplay.innerHTML = `
+                    <div class="error-message">
+                        ⚠️ Could not find verse. Please check your reference and try again.<br>
+                        <small style="margin-top: 10px; display: block;">Make sure the chapter and verse numbers are valid. Try: John 3:16, Psalm 23:1, Romans 8:28</small>
                     </div>
                 `;
                 wordStudy.innerHTML = '';
-                resultsCard.style.display = 'block';
-                resultsCard.scrollIntoView({ behavior: 'smooth' });
             }
         }
 
@@ -412,22 +746,66 @@
             const verseDisplay = document.getElementById('verseDisplay');
             const wordStudy = document.getElementById('wordStudy');
 
-            const verseText = currentTranslation === 'KJV' ? currentVerse.kjv : currentVerse.nkjv;
-
             verseDisplay.innerHTML = `
                 <div class="verse-display">
-                    <div class="verse-text">${verseText}</div>
+                    <div class="verse-text">${currentVerse.text}</div>
                     <div class="verse-reference">— ${currentVerse.reference} (${currentTranslation})</div>
                 </div>
             `;
 
-            wordStudy.innerHTML = currentVerse.words.map(word => `
-                <div class="word-item">
-                    <div class="word-original">${word.original}</div>
-                    <div class="word-transliteration">${word.transliteration}</div>
-                    <div class="word-definition">${word.definition}</div>
-                </div>
-            `).join('');
+            // Display relevant Strong's definitions based on verse
+            displayStrongsForVerse(currentVerse.reference);
+        }
+
+        function displayStrongsForVerse(reference) {
+            const wordStudy = document.getElementById('wordStudy');
+
+            // Map popular verses to their key Strong's numbers
+            const verseStrongsMap = {
+                'John 3:16': ['G25', 'G2889', 'G4100', 'G2222'],
+                'Psalm 23:1': ['H3068', 'H7462', 'H2637'],
+                'Proverbs 3:5-6': ['H982', 'H3820', 'H3474'],
+                'Philippians 4:13': ['G2480', 'G1743', 'G5547'],
+                'Romans 8:28': ['G4903', 'G18', 'G4286'],
+                'Matthew 6:33': ['G2212', 'G932', 'G1343'],
+                'Isaiah 41:10': ['H3372', 'H2388', 'H5826'],
+                'Jeremiah 29:11': ['H4284', 'H8615', 'H319'],
+                'Romans 12:2': ['G3339', 'G166', 'G2889'],
+                'Galatians 5:22': ['G2590', 'G4151', 'G26'],
+                'Ephesians 2:8': ['G5485', 'G4982', 'G4102'],
+                '1 Corinthians 13:13': ['G4102', 'G1680', 'G26'],
+                'Joshua 1:9': ['H2388', 'H553', 'H6206'],
+                'Psalm 46:1': ['H4268', 'H5797', 'H5833']
+            };
+
+            const strongsNumbers = verseStrongsMap[reference] || [];
+
+            if (strongsNumbers.length > 0) {
+                const definitions = strongsNumbers
+                    .map(num => strongsDatabase[num])
+                    .filter(def => def)
+                    .map(def => `
+                        <div class="word-item">
+                            <div class="word-original">${def.word}</div>
+                            <div class="word-transliteration">${def.transliteration}</div>
+                            <div class="word-definition">${def.definition}</div>
+                        </div>
+                    `).join('');
+
+                wordStudy.innerHTML = definitions || `
+                    <p style="color: #999; text-align: center;">
+                        Strong's definitions available for popular verses.<br>
+                        <small>Database includes 50+ key Greek and Hebrew words.</small>
+                    </p>
+                `;
+            } else {
+                wordStudy.innerHTML = `
+                    <p style="color: #999; text-align: center;">
+                        Strong's Concordance data available for popular verses.<br>
+                        <small>Try John 3:16, Psalm 23:1, or Philippians 4:13 for word studies!</small>
+                    </p>
+                `;
+            }
         }
 
         function switchTranslation(translation) {
@@ -438,8 +816,9 @@
             });
             event.target.classList.add('active');
 
-            if (currentVerse) {
-                displayVerse();
+            // Re-search if verse is already loaded
+            if (currentVerse && document.getElementById('verseInput').value) {
+                searchVerse();
             }
         }
 
@@ -449,24 +828,55 @@
         }
 
         function copyVerse() {
-            if (!currentVerse) return;
+            if (!currentVerse) {
+                alert('Please search for a verse first!');
+                return;
+            }
 
-            const verseText = currentTranslation === 'KJV' ? currentVerse.kjv : currentVerse.nkjv;
-            const fullText = `"${verseText}" — ${currentVerse.reference} (${currentTranslation})`;
+            const fullText = `${currentVerse.text}\n— ${currentVerse.reference} (${currentTranslation})`;
 
             navigator.clipboard.writeText(fullText).then(() => {
                 alert('✓ Verse copied to clipboard!');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = fullText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    alert('✓ Verse copied to clipboard!');
+                } catch (err) {
+                    alert('Could not copy. Please select and copy manually:\n\n' + fullText);
+                }
+                document.body.removeChild(textArea);
             });
         }
 
-        function addToGoals() {
-            if (!currentVerse) return;
-            alert(`This will add ${currentVerse.reference} to your goals page!\n\n(Feature coming soon - will integrate with goals.html)`);
+        function addToDeclarations() {
+            if (!currentVerse) {
+                alert('Please search for a verse first!');
+                return;
+            }
+
+            // Save verse reference to localStorage for declarations page
+            const savedVerse = {
+                text: currentVerse.text,
+                reference: currentVerse.reference,
+                timestamp: Date.now()
+            };
+
+            localStorage.setItem('pendingDeclarationVerse', JSON.stringify(savedVerse));
+
+            if (confirm(`Add "${currentVerse.reference}" to your declarations?\n\nYou'll be taken to the Declarations page to create a declaration based on this verse.`)) {
+                window.location.href = 'declarations.html';
+            }
         }
 
         function searchAnother() {
             document.getElementById('verseInput').value = '';
             document.getElementById('verseInput').focus();
+            document.getElementById('resultsCard').style.display = 'none';
         }
     </script>
 </body>

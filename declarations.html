@@ -6,6 +6,139 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Declarations - Bible Goals Tracker</title>
     <style>
+        /* Navigation Menu Styles */
+        .top-nav {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            margin-bottom: 30px;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .nav-logo-icon {
+            font-size: 28px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #666;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 8px 0;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: #667eea;
+        }
+
+        .nav-link.active {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #667eea;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: white;
+                flex-direction: column;
+                padding: 30px;
+                gap: 20px;
+                transition: left 0.3s ease;
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-link {
+                width: 100%;
+                padding: 15px;
+                text-align: center;
+                border-bottom: 1px solid #f0f0f0;
+            }
+
+            .nav-btn {
+                width: 100%;
+                text-align: center;
+                padding: 15px;
+            }
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -20,7 +153,7 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
@@ -68,54 +201,131 @@
             margin-top: 10px;
         }
 
-        .declaration-card {
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: white;
+            padding: 10px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .create-card {
             background: white;
             border-radius: 20px;
             padding: 40px;
-            margin-bottom: 25px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 30px;
         }
 
-        .declaration-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        .form-group {
+            margin-bottom: 25px;
         }
 
-        .declaration-number {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-size: 24px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .declaration-text {
-            font-size: 24px;
+        label {
+            display: block;
             color: #333;
-            line-height: 1.6;
-            font-weight: 500;
-            margin-bottom: 15px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 15px;
         }
 
-        .declaration-scripture {
-            color: #667eea;
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
             font-size: 16px;
+            font-family: 'Georgia', serif;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .helper-text {
+            font-size: 13px;
+            color: #999;
+            margin-top: 5px;
             font-style: italic;
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
+        .suggested-declarations {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .suggested-declarations h4 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .suggestion-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid #667eea;
+        }
+
+        .suggestion-item:hover {
+            background: #667eea15;
+            transform: translateX(5px);
+        }
+
+        .suggestion-text {
+            color: #333;
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        .suggestion-category {
+            color: #999;
+            font-size: 12px;
         }
 
         .btn {
@@ -138,134 +348,165 @@
             box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
         }
 
-        .btn-secondary {
+        .declaration-card {
             background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            position: relative;
         }
 
-        .btn-secondary:hover {
+        .declaration-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .declaration-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .declaration-number {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .declaration-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            background: #f0f0f0;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .icon-btn:hover {
             background: #667eea;
             color: white;
         }
 
+        .declaration-text {
+            font-size: 22px;
+            color: #333;
+            line-height: 1.6;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .declaration-scripture {
+            color: #667eea;
+            font-size: 14px;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .declaration-category {
+            display: inline-block;
+            background: #667eea15;
+            color: #667eea;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
         .daily-focus {
-            background: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             border-radius: 20px;
             padding: 40px;
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
         .daily-focus h2 {
-            color: #333;
             font-size: 28px;
             margin-bottom: 20px;
         }
 
         .today-declaration {
-            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-            padding: 30px;
-            border-radius: 15px;
-            border-left: 5px solid #667eea;
-        }
-
-        .today-declaration .text {
-            font-size: 28px;
-            color: #333;
+            font-size: 26px;
             font-weight: 600;
             line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
-        .today-date {
-            color: #999;
-            font-size: 14px;
             margin-bottom: 20px;
         }
 
         .speak-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
             color: white;
-            border: none;
-            padding: 18px 40px;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: 600;
+            padding: 15px 35px;
+            border-radius: 30px;
             cursor: pointer;
-            margin-top: 20px;
+            font-size: 16px;
+            font-weight: 600;
             transition: all 0.3s ease;
         }
 
         .speak-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-        }
-
-        .nav-links {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 14px;
-        }
-
-        .nav-links a:hover {
-            text-decoration: underline;
-        }
-
-        .tips-card {
             background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            color: #667eea;
         }
 
-        .tips-card h3 {
-            color: #333;
-            font-size: 22px;
-            margin-bottom: 15px;
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
         }
 
-        .tip-item {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-            align-items: start;
-        }
-
-        .tip-icon {
-            font-size: 24px;
-            flex-shrink: 0;
-        }
-
-        .tip-text {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        @media print {
-            body {
-                background: white;
-                padding: 20px;
-            }
-
-            .action-buttons,
-            .nav-links,
-            .tips-card {
-                display: none;
-            }
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
         }
     </style>
 </head>
 
 <body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="nav-logo-icon">📖</span>
+                <span>Bible Goals Tracker</span>
+            </a>
+
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+
+            <div class="nav-links" id="navLinks">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="goals.html" class="nav-link">My Goals</a>
+                <a href="declarations.html" class="nav-link">Declarations</a>
+                <a href="bible-lookup.html" class="nav-link">Bible Lookup</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+                <button id="authButton" class="nav-btn" onclick="handleAuth()">Sign In</button>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
         <div class="header">
             <h1>✨ My Daily Declarations</h1>
@@ -279,190 +520,455 @@
             </div>
         </div>
 
-        <!-- Today's Declaration Focus -->
-        <div class="daily-focus">
-            <h2>🌅 Today's Declaration</h2>
-            <p class="today-date" id="todayDate">Friday, January 16, 2026</p>
-
-            <div class="today-declaration">
-                <div class="text" id="todayDeclaration">
-                    "I am more than a conqueror through Christ who strengthens me"
-                </div>
-            </div>
-
-            <button class="speak-btn" onclick="speakDeclaration()">🔊 Speak It Aloud</button>
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('view')">📋 My Declarations</button>
+            <button class="tab" onclick="showTab('create')">➕ Create New</button>
         </div>
 
-        <!-- All 5 Declarations -->
-        <div class="declaration-card">
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <div class="declaration-number">1</div>
-                <div style="flex: 1;">
-                    <div class="declaration-text">I am more than a conqueror through Christ who strengthens me</div>
-                    <div class="declaration-scripture">Romans 8:37</div>
+        <!-- View Declarations Tab -->
+        <div id="viewTab" class="tab-content active">
+            <!-- Today's Focus -->
+            <div class="daily-focus">
+                <h2>🌅 Today's Declaration</h2>
+                <div class="today-declaration" id="todayDeclaration">
+                    I am more than a conqueror through Christ who strengthens me
                 </div>
+                <button class="speak-btn" onclick="speakDeclaration()">🔊 Speak It Aloud</button>
             </div>
+
+            <!-- All Declarations -->
+            <div id="declarationsList"></div>
         </div>
 
-        <div class="declaration-card">
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <div class="declaration-number">2</div>
-                <div style="flex: 1;">
-                    <div class="declaration-text">God's favor surrounds me like a shield</div>
-                    <div class="declaration-scripture">Psalm 5:12</div>
-                </div>
+        <!-- Create Declaration Tab -->
+        <div id="createTab" class="tab-content">
+            <div class="create-card">
+                <div id="successMessage" class="success-message"></div>
+
+                <form id="declarationForm">
+                    <div class="form-group">
+                        <label for="categoryType">Category Type</label>
+                        <select id="categoryType" onchange="toggleCustomCategory()" required>
+                            <option value="">Select an option...</option>
+                            <option value="predefined">Choose from existing categories</option>
+                            <option value="custom">Create my own category</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="predefinedCategoryDiv" style="display: none;">
+                        <label for="category">Select Category</label>
+                        <select id="category">
+                            <option value="">Select a category...</option>
+                            <option value="Accepted">You Are Accepted</option>
+                            <option value="Secure">You Are Secure</option>
+                            <option value="Significant">You Are Significant</option>
+                            <option value="Identity">Identity & Purpose</option>
+                            <option value="Fear">Fear & Anxiety</option>
+                            <option value="Career">Career & Workplace</option>
+                            <option value="Marriage">Marriage & Relationships</option>
+                            <option value="Dating">Dating & Courtship</option>
+                            <option value="Family">Family & Parenting</option>
+                            <option value="Finances">Finances & Provision</option>
+                            <option value="Health">Health & Healing</option>
+                            <option value="Protection">Protection & Safety</option>
+                            <option value="Wisdom">Wisdom & Decisions</option>
+                            <option value="Faith">Faith & Trust</option>
+                            <option value="Victory">Victory & Breakthrough</option>
+                            <option value="Peace">Peace & Rest</option>
+                            <option value="Favor">Favor & Blessing</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="customCategoryDiv" style="display: none;">
+                        <label for="customCategory">Your Category Name</label>
+                        <input type="text" id="customCategory" placeholder="e.g., Faith, Wisdom, Relationships...">
+                        <p class="helper-text">Create your own category for this declaration</p>
+                    </div>
+
+                    <div class="suggested-declarations" id="suggestions" style="display: none;">
+                        <h4>💡 Biblical Declaration Examples:</h4>
+                        <div id="suggestionsList"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="declarationText">Your Declaration</label>
+                        <textarea id="declarationText" placeholder="I declare and decree..." required></textarea>
+                        <p class="helper-text">Write in present tense using faith-filled, commanding language</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="scripture">Bible Verse Reference</label>
+                        <input type="text" id="scripture" placeholder="e.g., Romans 8:37, Philippians 4:13">
+                        <p class="helper-text">Which scripture supports this declaration?</p>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">💾 Save Declaration</button>
+                </form>
             </div>
-        </div>
-
-        <div class="declaration-card">
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <div class="declaration-number">3</div>
-                <div style="flex: 1;">
-                    <div class="declaration-text">I walk in divine purpose and calling</div>
-                    <div class="declaration-scripture">Ephesians 2:10</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="declaration-card">
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <div class="declaration-number">4</div>
-                <div style="flex: 1;">
-                    <div class="declaration-text">Every obstacle becomes an opportunity for God's glory</div>
-                    <div class="declaration-scripture">Romans 8:28</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="declaration-card">
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <div class="declaration-number">5</div>
-                <div style="flex: 1;">
-                    <div class="declaration-text">God is working all things together for my good</div>
-                    <div class="declaration-scripture">Romans 8:28</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tips -->
-        <div class="tips-card">
-            <h3>💡 How to Use Your Declarations</h3>
-
-            <div class="tip-item">
-                <div class="tip-icon">🌅</div>
-                <div class="tip-text">
-                    <strong>Start Your Day:</strong> Speak all 5 declarations aloud each morning to set the tone for
-                    your day
-                </div>
-            </div>
-
-            <div class="tip-item">
-                <div class="tip-icon">🗣️</div>
-                <div class="tip-text">
-                    <strong>Say It With Faith:</strong> Don't just read them - declare them boldly and believe what
-                    you're saying
-                </div>
-            </div>
-
-            <div class="tip-item">
-                <div class="tip-icon">📖</div>
-                <div class="tip-text">
-                    <strong>Meditate on Scripture:</strong> Look up the Bible verses connected to each declaration
-                </div>
-            </div>
-
-            <div class="tip-item">
-                <div class="tip-icon">💪</div>
-                <div class="tip-text">
-                    <strong>In Difficult Moments:</strong> When facing challenges, speak these declarations over your
-                    situation
-                </div>
-            </div>
-
-            <div class="tip-item">
-                <div class="tip-icon">📝</div>
-                <div class="tip-text">
-                    <strong>Personalize Them:</strong> Edit your declarations in your profile to make them more specific
-                    to your journey
-                </div>
-            </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="action-buttons">
-            <button class="btn btn-primary" onclick="window.print()">🖨️ Print Declarations</button>
-            <button class="btn btn-secondary" onclick="shareDeclarations()">📤 Share</button>
-            <button class="btn btn-secondary" onclick="window.location.href='profile.html'">✏️ Edit My
-                Declarations</button>
-        </div>
-
-        <div class="nav-links">
-            <a href="index.html">← Home</a>
-            <a href="goals.html">My Goals</a>
-            <a href="profile.html">Profile</a>
-            <a href="bible-lookup.html">Bible Lookup</a>
         </div>
     </div>
 
     <script>
-        // Display today's date
-        const today = new Date();
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('todayDate').textContent = today.toLocaleDateString('en-US', options);
+        // Biblical Declarations Database
+        const biblicalDeclarations = {
+            "Accepted": [
+                "I declare that I have received Him and I am accepted by God (John 1:12)",
+                "I am called the friend of God (John 15:15)",
+                "I am justified by faith and have peace with God (Romans 5:1)",
+                "I am united with the Lord and one with Him in spirit (1 Corinthians 6:17)",
+                "I am bought with a price; I am not my own but belong to God (1 Corinthians 6:19-20)",
+                "I am a member of Christ's body, part of His family (1 Corinthians 12:27)",
+                "I am chosen by God and adopted as His child before the foundation of the world (Ephesians 1:3-8)",
+                "I am redeemed and forgiven of all my sins through His blood (Colossians 1:13-14)",
+                "I am complete in Christ; I lack nothing spiritually (Colossians 2:9-10)",
+                "I have direct access to the throne of grace with confidence (Hebrews 4:14-16)"
+            ],
+            "Secure": [
+                "I declare there is now no condemnation for me because I am in Christ Jesus (Romans 8:1-2)",
+                "I am assured that God works all things together for my good (Romans 8:28)",
+                "I cannot be separated from the love of God in Christ Jesus (Romans 8:31-39)",
+                "I am established, anointed, and sealed by God with His Holy Spirit (2 Corinthians 1:21-22)",
+                "My life is hidden with Christ in God; I am secure in Him (Colossians 3:1-4)",
+                "I am confident that God will complete the good work He started in me (Philippians 1:6)",
+                "I am a citizen of heaven; my citizenship is not of this world (Philippians 3:20)",
+                "I have not been given a spirit of fear, but of power, love, and a sound mind (2 Timothy 1:7)",
+                "I am born of God and the evil one cannot touch me (1 John 5:18)"
+            ],
+            "Significant": [
+                "I am a branch of Jesus Christ, the true vine (John 15:5)",
+                "I have been chosen and appointed by God to bear fruit that will last (John 15:16)",
+                "I am God's temple; the Spirit of God dwells in me (1 Corinthians 3:16)",
+                "I am a new creation in Christ; old things have passed away (2 Corinthians 5:17)",
+                "I am a minister of reconciliation, an ambassador for Christ (2 Corinthians 5:17-21)",
+                "I am seated with Christ in the heavenly realms (Ephesians 2:6)",
+                "I am God's workmanship, created in Christ Jesus to do good works (Ephesians 2:10)",
+                "I can approach God with freedom and confidence through faith in Christ (Ephesians 3:12)",
+                "I can do all things through Christ who strengthens me (Philippians 4:13)"
+            ],
+            "Identity": [
+                "I AM fearfully and wonderfully made in God's image (Psalm 139:14)",
+                "I AM the righteousness of God in Christ Jesus (2 Corinthians 5:21)",
+                "I AM a child of the Most High God (1 John 3:1)",
+                "I declare that my identity is rooted in Christ, not in people's opinions (Colossians 3:3)",
+                "I AM called, chosen, and anointed for such a time as this (Esther 4:14)"
+            ],
+            "Fear": [
+                "I bind the spirit of fear and loose the spirit of power, love, and a sound mind (2 Timothy 1:7)",
+                "I declare that God has not given me a spirit of fear (2 Timothy 1:7)",
+                "I command every anxious thought to be cast down in Jesus' name (2 Corinthians 10:5)",
+                "I decree that perfect love casts out all fear from my life (1 John 4:18)",
+                "I will not fear, for God is with me; I will not be dismayed (Isaiah 41:10)"
+            ],
+            "Career": [
+                "I declare that the work of my hands is blessed and prosperous (Deuteronomy 28:12)",
+                "I decree that favor surrounds me in my workplace like a shield (Psalm 5:12)",
+                "I command doors of opportunity to open that no one can shut (Revelation 3:8)",
+                "I bind workplace politics and loose divine connections and promotions (Psalm 75:6-7)",
+                "I declare excellence and integrity guide all my professional endeavors (Proverbs 22:29)"
+            ],
+            "Marriage": [
+                "I declare that my marriage is built on the foundation of Christ (Matthew 7:24-25)",
+                "I bind division and loose unity, love, and understanding in my marriage (Ecclesiastes 4:12)",
+                "I decree that we are equally yoked and walk together in purpose (Amos 3:3)",
+                "I command every attack against my marriage to be destroyed (Mark 10:9)",
+                "I declare that love, honor, and respect flow freely in my home (Ephesians 5:33)"
+            ],
+            "Dating": [
+                "I declare that God is preparing my spouse even now (Proverbs 18:22)",
+                "I bind ungodly soul ties and loose divine connections (1 Corinthians 6:18)",
+                "I decree that I will not settle for less than God's best (Psalm 37:4)",
+                "I command clarity and discernment in every relationship (James 1:5)",
+                "I declare purity, patience, and godly wisdom guide my dating journey (1 Thessalonians 4:3-4)"
+            ],
+            "Family": [
+                "I declare that as for me and my house, we will serve the Lord (Joshua 24:15)",
+                "I bind generational curses and loose generational blessings over my family (Galatians 3:13-14)",
+                "I decree that my children are taught by the Lord and great is their peace (Isaiah 54:13)",
+                "I command unity, love, and forgiveness to reign in my household (Colossians 3:13-14)",
+                "I declare that my family walks in divine health, favor, and purpose (3 John 1:2)"
+            ],
+            "Finances": [
+                "I declare that my God supplies all my needs according to His riches in glory (Philippians 4:19)",
+                "I bind lack and poverty and loose abundance and overflow (Malachi 3:10)",
+                "I decree that I am the head and not the tail financially (Deuteronomy 28:13)",
+                "I command the windows of heaven to open over my finances (Malachi 3:10)",
+                "I declare that I lend and do not borrow; I am blessed to be a blessing (Deuteronomy 28:12)"
+            ],
+            "Health": [
+                "I declare by His stripes I am healed (Isaiah 53:5)",
+                "I bind every spirit of infirmity and disease in Jesus' name (Luke 13:11-13)",
+                "I decree that long life and divine health are my portion (Psalm 91:16)",
+                "I command my body to line up with the Word of God (3 John 1:2)",
+                "I declare that I am restored, renewed, and strengthened daily (Isaiah 40:31)"
+            ],
+            "Protection": [
+                "I declare that I dwell in the secret place of the Most High (Psalm 91:1)",
+                "I bind every evil plot and loose angelic protection around me (Psalm 91:11)",
+                "I decree that no weapon formed against me shall prosper (Isaiah 54:17)",
+                "I command a hedge of protection around my family, home, and possessions (Job 1:10)",
+                "I declare that the angel of the Lord encamps around me (Psalm 34:7)"
+            ],
+            "Wisdom": [
+                "I declare that the wisdom of God flows through me (James 1:5)",
+                "I bind confusion and loose clarity in every decision I make (1 Corinthians 14:33)",
+                "I decree that I have the mind of Christ (1 Corinthians 2:16)",
+                "I command divine insight and understanding in complex situations (Proverbs 2:6)",
+                "I declare that wisdom is my principal thing and I get understanding (Proverbs 4:7)"
+            ],
+            "Faith": [
+                "I declare that my faith moves mountains (Matthew 17:20)",
+                "I bind doubt and unbelief and loose unwavering faith (Mark 11:23)",
+                "I decree that I walk by faith and not by sight (2 Corinthians 5:7)",
+                "I command my faith to increase and produce supernatural results (Luke 17:5)",
+                "I declare that all things are possible to those who believe (Mark 9:23)"
+            ],
+            "Victory": [
+                "I declare that I am more than a conqueror through Christ (Romans 8:37)",
+                "I bind the spirit of defeat and loose the spirit of victory (1 Corinthians 15:57)",
+                "I decree that I always triumph in Christ Jesus (2 Corinthians 2:14)",
+                "I command every obstacle to become an opportunity for God's glory (Romans 8:28)",
+                "I declare that greater is He in me than he that is in the world (1 John 4:4)"
+            ],
+            "Peace": [
+                "I declare that the peace of God guards my heart and mind (Philippians 4:7)",
+                "I bind worry and anxiety and loose supernatural peace (Matthew 11:28)",
+                "I decree that I will not be troubled or afraid (John 14:27)",
+                "I command every storm in my life to be still (Mark 4:39)",
+                "I declare that perfect peace is mine because my mind is stayed on God (Isaiah 26:3)"
+            ],
+            "Favor": [
+                "I declare that God's favor surrounds me like a shield (Psalm 5:12)",
+                "I bind disfavor and loose supernatural favor in every area of my life (Proverbs 3:4)",
+                "I decree that I have favor with God and man (Luke 2:52)",
+                "I command doors of opportunity to open by divine favor (Genesis 39:21)",
+                "I declare that favor follows me wherever I go (Psalm 23:6)"
+            ]
+        };
 
-        // Rotate daily declaration (changes based on day of week)
-        const declarations = [
-            "I am more than a conqueror through Christ who strengthens me",
-            "God's favor surrounds me like a shield",
-            "I walk in divine purpose and calling",
-            "Every obstacle becomes an opportunity for God's glory",
-            "God is working all things together for my good"
-        ];
+        // Load declarations
+        let declarations = JSON.parse(localStorage.getItem('declarations')) || [];
+        displayDeclarations();
 
-        const dayOfWeek = today.getDay();
-        const rotatingIndex = dayOfWeek % 5;
-        document.getElementById('todayDeclaration').textContent = declarations[rotatingIndex];
+        // Navigation functions
+        function updateAuthButton() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const authButton = document.getElementById('authButton');
+
+            if (isLoggedIn) {
+                authButton.textContent = 'Sign Out';
+            } else {
+                authButton.textContent = 'Sign In';
+            }
+        }
+
+        function handleAuth() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+            if (isLoggedIn) {
+                if (confirm('Are you sure you want to sign out?')) {
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('userName');
+                    window.location.href = 'index.html';
+                }
+            } else {
+                window.location.href = 'signin.html';
+            }
+        }
+
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function (event) {
+            const navLinks = document.getElementById('navLinks');
+            const mobileBtn = document.querySelector('.mobile-menu-btn');
+
+            if (!navLinks.contains(event.target) && !mobileBtn.contains(event.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', function () {
+            updateAuthButton();
+
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            navLinks.forEach(link => {
+                const linkPage = link.getAttribute('href');
+                if (linkPage === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Tab switching
+        function showTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            if (tab === 'view') {
+                document.querySelector('.tab:nth-child(1)').classList.add('active');
+                document.getElementById('viewTab').classList.add('active');
+            } else {
+                document.querySelector('.tab:nth-child(2)').classList.add('active');
+                document.getElementById('createTab').classList.add('active');
+            }
+        }
+
+        // Toggle between predefined and custom categories
+        function toggleCustomCategory() {
+            const categoryType = document.getElementById('categoryType').value;
+            const predefinedDiv = document.getElementById('predefinedCategoryDiv');
+            const customDiv = document.getElementById('customCategoryDiv');
+            const suggestionsDiv = document.getElementById('suggestions');
+
+            if (categoryType === 'predefined') {
+                predefinedDiv.style.display = 'block';
+                customDiv.style.display = 'none';
+                document.getElementById('customCategory').value = '';
+            } else if (categoryType === 'custom') {
+                predefinedDiv.style.display = 'none';
+                customDiv.style.display = 'block';
+                suggestionsDiv.style.display = 'none';
+                document.getElementById('category').value = '';
+            } else {
+                predefinedDiv.style.display = 'none';
+                customDiv.style.display = 'none';
+                suggestionsDiv.style.display = 'none';
+            }
+        }
+
+        // Show suggestions based on category
+        document.getElementById('category').addEventListener('change', function () {
+            const category = this.value;
+            const suggestionsDiv = document.getElementById('suggestions');
+            const suggestionsList = document.getElementById('suggestionsList');
+
+            if (category && biblicalDeclarations[category]) {
+                suggestionsDiv.style.display = 'block';
+                suggestionsList.innerHTML = biblicalDeclarations[category].map(text => `
+                    <div class="suggestion-item" onclick="useSuggestion('${text.replace(/'/g, "\\'")}', '${category}')">
+                        <div class="suggestion-text">${text}</div>
+                        <div class="suggestion-category">Click to use this</div>
+                    </div>
+                `).join('');
+            } else {
+                suggestionsDiv.style.display = 'none';
+            }
+        });
+
+        function useSuggestion(text, category) {
+            document.getElementById('declarationText').value = text;
+            document.getElementById('category').value = category;
+            document.getElementById('categoryType').value = 'predefined';
+            toggleCustomCategory();
+            showSuccessMessage('✓ Declaration template loaded! Edit as needed.');
+        }
+
+        // Save declaration
+        document.getElementById('declarationForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const categoryType = document.getElementById('categoryType').value;
+            let finalCategory = '';
+
+            if (categoryType === 'predefined') {
+                finalCategory = document.getElementById('category').value;
+                if (!finalCategory) {
+                    alert('Please select a category');
+                    return;
+                }
+            } else if (categoryType === 'custom') {
+                finalCategory = document.getElementById('customCategory').value;
+                if (!finalCategory) {
+                    alert('Please enter a custom category name');
+                    return;
+                }
+            } else {
+                alert('Please select a category type');
+                return;
+            }
+
+            const declaration = {
+                id: Date.now(),
+                text: document.getElementById('declarationText').value,
+                category: finalCategory,
+                scripture: document.getElementById('scripture').value,
+                createdAt: new Date().toLocaleDateString()
+            };
+
+            declarations.push(declaration);
+            localStorage.setItem('declarations', JSON.stringify(declarations));
+
+            this.reset();
+            document.getElementById('suggestions').style.display = 'none';
+            document.getElementById('predefinedCategoryDiv').style.display = 'none';
+            document.getElementById('customCategoryDiv').style.display = 'none';
+            showSuccessMessage('✓ Declaration saved successfully!');
+            displayDeclarations();
+            showTab('view');
+        });
+
+        function displayDeclarations() {
+            const list = document.getElementById('declarationsList');
+
+            if (declarations.length === 0) {
+                list.innerHTML = '<div class="empty-state"><p style="font-size: 48px; margin-bottom: 20px;">📋</p><p>No declarations yet. Create your first declaration!</p></div>';
+                return;
+            }
+
+            // Update today's declaration
+            const today = new Date().getDay();
+            const todayIndex = today % declarations.length;
+            document.getElementById('todayDeclaration').textContent = declarations[todayIndex].text;
+
+            list.innerHTML = declarations.map((decl, index) => `
+                <div class="declaration-card">
+                    <div class="declaration-header">
+                        <div class="declaration-number">${index + 1}</div>
+                        <div class="declaration-actions">
+                            <button class="icon-btn" onclick="deleteDeclaration(${decl.id})" title="Delete">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="declaration-text">${decl.text}</div>
+                    ${decl.scripture ? `<div class="declaration-scripture">📖 ${decl.scripture}</div>` : ''}
+                    <span class="declaration-category">${decl.category}</span>
+                </div>
+            `).join('');
+        }
+
+        function deleteDeclaration(id) {
+            if (confirm('Are you sure you want to delete this declaration?')) {
+                declarations = declarations.filter(d => d.id !== id);
+                localStorage.setItem('declarations', JSON.stringify(declarations));
+                displayDeclarations();
+                showSuccessMessage('✓ Declaration deleted');
+            }
+        }
 
         function speakDeclaration() {
-            const declaration = document.getElementById('todayDeclaration').textContent;
+            const text = document.getElementById('todayDeclaration').textContent;
 
             if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance(declaration);
+                const utterance = new SpeechSynthesisUtterance(text);
                 utterance.rate = 0.9;
-                utterance.pitch = 1;
                 window.speechSynthesis.speak(utterance);
             } else {
-                alert('🗣️ Speak this declaration aloud:\n\n"' + declaration + '"');
+                alert('🗣️ Speak this aloud:\n\n"' + text + '"');
             }
         }
 
-        function shareDeclarations() {
-            const text = `My Daily Declarations:\n\n` +
-                `1. I am more than a conqueror through Christ who strengthens me\n` +
-                `2. God's favor surrounds me like a shield\n` +
-                `3. I walk in divine purpose and calling\n` +
-                `4. Every obstacle becomes an opportunity for God's glory\n` +
-                `5. God is working all things together for my good\n\n` +
-                `Join me at Bible Goals Tracker!`;
+        function showSuccessMessage(message) {
+            const msgBox = document.getElementById('successMessage');
+            msgBox.textContent = message;
+            msgBox.style.display = 'block';
 
-            if (navigator.share) {
-                navigator.share({
-                    title: 'My Daily Declarations',
-                    text: text
-                }).catch(() => {
-                    copyToClipboard(text);
-                });
-            } else {
-                copyToClipboard(text);
-            }
-        }
-
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert('✓ Declarations copied to clipboard! You can now paste and share them.');
-            }).catch(() => {
-                alert('Here are your declarations to share:\n\n' + text);
-            });
+            setTimeout(() => {
+                msgBox.style.display = 'none';
+            }, 3000);
         }
     </script>
 </body>

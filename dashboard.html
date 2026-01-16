@@ -6,6 +6,139 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Bible Goals Tracker</title>
     <style>
+        /* Navigation Menu Styles */
+        .top-nav {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            margin-bottom: 30px;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .nav-logo-icon {
+            font-size: 28px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #666;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 8px 0;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: #667eea;
+        }
+
+        .nav-link.active {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #667eea;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: white;
+                flex-direction: column;
+                padding: 30px;
+                gap: 20px;
+                transition: left 0.3s ease;
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-link {
+                width: 100%;
+                padding: 15px;
+                text-align: center;
+                border-bottom: 1px solid #f0f0f0;
+            }
+
+            .nav-btn {
+                width: 100%;
+                text-align: center;
+                padding: 15px;
+            }
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -342,31 +475,36 @@
             color: #999;
             font-size: 13px;
         }
-
-        .nav-links {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            font-size: 14px;
-        }
-
-        .nav-links a:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 
 <body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="nav-logo-icon">📖</span>
+                <span>Bible Goals Tracker</span>
+            </a>
+
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+
+            <div class="nav-links" id="navLinks">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="goals.html" class="nav-link">My Goals</a>
+                <a href="declarations.html" class="nav-link">Declarations</a>
+                <a href="bible-lookup.html" class="nav-link">Bible Lookup</a>
+                <a href="profile.html" class="nav-link">Profile</a>
+                <button id="authButton" class="nav-btn" onclick="handleAuth()">Sign In</button>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
         <!-- Welcome Banner -->
         <div class="welcome-banner">
             <div class="welcome-text">
-                <h1>Welcome back, Bilha! 👋</h1>
+                <h1>Welcome back, <span id="userName">Bilha</span>! 👋</h1>
                 <p id="currentDate">Friday, January 16, 2026</p>
             </div>
             <div class="today-verse">
@@ -382,7 +520,7 @@
                     <span class="stat-icon">🎯</span>
                     <span class="stat-trend">↑ 3 this month</span>
                 </div>
-                <div class="stat-number">12</div>
+                <div class="stat-number" id="activeGoals">0</div>
                 <div class="stat-label">Active Goals</div>
             </div>
 
@@ -391,7 +529,7 @@
                     <span class="stat-icon">✅</span>
                     <span class="stat-trend">↑ 2 this week</span>
                 </div>
-                <div class="stat-number">8</div>
+                <div class="stat-number" id="completedGoals">0</div>
                 <div class="stat-label">Completed</div>
             </div>
 
@@ -409,7 +547,7 @@
                     <span class="stat-icon">📈</span>
                     <span class="stat-trend">↑ 12%</span>
                 </div>
-                <div class="stat-number">67%</div>
+                <div class="stat-number" id="successRate">0%</div>
                 <div class="stat-label">Success Rate</div>
             </div>
         </div>
@@ -423,42 +561,9 @@
                     <a href="goals.html" class="view-all">View All →</a>
                 </div>
 
-                <div class="goal-item">
-                    <div class="goal-header">
-                        <div class="goal-title">Read the Bible daily</div>
-                        <span class="goal-status status-active">Active</span>
-                    </div>
-                    <div class="goal-progress">
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 75%"></div>
-                        </div>
-                        <div class="progress-text">75% complete - 22 of 30 days</div>
-                    </div>
-                </div>
-
-                <div class="goal-item">
-                    <div class="goal-header">
-                        <div class="goal-title">Serve in community outreach</div>
-                        <span class="goal-status status-active">Active</span>
-                    </div>
-                    <div class="goal-progress">
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 40%"></div>
-                        </div>
-                        <div class="progress-text">40% complete - 4 of 10 events</div>
-                    </div>
-                </div>
-
-                <div class="goal-item">
-                    <div class="goal-header">
-                        <div class="goal-title">Memorize Psalm 23</div>
-                        <span class="goal-status status-completed">Completed</span>
-                    </div>
-                    <div class="goal-progress">
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 100%"></div>
-                        </div>
-                        <div class="progress-text">100% complete - Finished Jan 10</div>
+                <div id="recentGoalsList">
+                    <div style="text-align: center; padding: 40px; color: #999;">
+                        <p>No goals yet. Create your first goal!</p>
                     </div>
                 </div>
 
@@ -466,35 +571,9 @@
                 <div style="margin-top: 40px;">
                     <div class="card-title">📌 Recent Activity</div>
 
-                    <div class="activity-item">
-                        <div class="activity-icon">✅</div>
-                        <div class="activity-content">
-                            <div class="activity-title">Completed goal: Memorize Psalm 23</div>
-                            <div class="activity-time">6 days ago</div>
-                        </div>
-                    </div>
-
-                    <div class="activity-item">
-                        <div class="activity-icon">➕</div>
-                        <div class="activity-content">
-                            <div class="activity-title">Created new goal: Daily prayer journal</div>
-                            <div class="activity-time">1 week ago</div>
-                        </div>
-                    </div>
-
-                    <div class="activity-item">
-                        <div class="activity-icon">📖</div>
-                        <div class="activity-content">
-                            <div class="activity-title">Searched Bible verse: Philippians 4:13</div>
-                            <div class="activity-time">1 week ago</div>
-                        </div>
-                    </div>
-
-                    <div class="activity-item">
-                        <div class="activity-icon">🗣️</div>
-                        <div class="activity-content">
-                            <div class="activity-title">Updated daily declarations</div>
-                            <div class="activity-time">2 weeks ago</div>
+                    <div id="activityList">
+                        <div style="text-align: center; padding: 20px; color: #999;">
+                            <p>No activity yet</p>
                         </div>
                     </div>
                 </div>
@@ -547,17 +626,74 @@
                 </div>
             </div>
         </div>
-
-        <div class="nav-links">
-            <a href="index.html">← Home</a>
-            <a href="goals.html">My Goals</a>
-            <a href="declarations.html">Declarations</a>
-            <a href="bible-lookup.html">Bible Lookup</a>
-            <a href="profile.html">Profile</a>
-        </div>
     </div>
 
     <script>
+        // Check login status and update button
+        function updateAuthButton() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const authButton = document.getElementById('authButton');
+
+            if (isLoggedIn) {
+                authButton.textContent = 'Sign Out';
+            } else {
+                authButton.textContent = 'Sign In';
+            }
+        }
+
+        // Handle sign in/out
+        function handleAuth() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+            if (isLoggedIn) {
+                if (confirm('Are you sure you want to sign out?')) {
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('userName');
+                    window.location.href = 'index.html';
+                }
+            } else {
+                window.location.href = 'signin.html';
+            }
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function (event) {
+            const navLinks = document.getElementById('navLinks');
+            const mobileBtn = document.querySelector('.mobile-menu-btn');
+
+            if (!navLinks.contains(event.target) && !mobileBtn.contains(event.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // Highlight active page
+        window.addEventListener('DOMContentLoaded', function () {
+            updateAuthButton();
+
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            navLinks.forEach(link => {
+                const linkPage = link.getAttribute('href');
+                if (linkPage === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Display user name
+            const userName = localStorage.getItem('userName') || 'User';
+            document.getElementById('userName').textContent = userName;
+
+            // Load goals stats
+            loadGoalsStats();
+        });
+
         // Display current date
         const today = new Date();
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -585,6 +721,49 @@
                 window.speechSynthesis.speak(utterance);
             } else {
                 alert('🗣️ Speak this aloud:\n\n"' + declaration + '"');
+            }
+        }
+
+        function loadGoalsStats() {
+            const goals = JSON.parse(localStorage.getItem('bibleGoals')) || [];
+
+            const activeGoals = goals.filter(g => g.currentCount < g.targetCount).length;
+            const completedGoals = goals.filter(g => g.currentCount >= g.targetCount).length;
+            const totalGoals = goals.length;
+            const successRate = totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
+
+            document.getElementById('activeGoals').textContent = activeGoals;
+            document.getElementById('completedGoals').textContent = completedGoals;
+            document.getElementById('successRate').textContent = successRate + '%';
+
+            // Display recent goals
+            const recentGoals = goals.slice(-3).reverse();
+            const recentGoalsList = document.getElementById('recentGoalsList');
+
+            if (recentGoals.length === 0) {
+                recentGoalsList.innerHTML = '<div style="text-align: center; padding: 40px; color: #999;"><p>No goals yet. Create your first goal!</p></div>';
+            } else {
+                recentGoalsList.innerHTML = recentGoals.map(goal => {
+                    const progress = (goal.currentCount / goal.targetCount) * 100;
+                    const isCompleted = goal.currentCount >= goal.targetCount;
+
+                    return `
+                        <div class="goal-item">
+                            <div class="goal-header">
+                                <div class="goal-title">${goal.title}</div>
+                                <span class="goal-status ${isCompleted ? 'status-completed' : 'status-active'}">
+                                    ${isCompleted ? 'Completed' : 'Active'}
+                                </span>
+                            </div>
+                            <div class="goal-progress">
+                                <div class="progress-bar-bg">
+                                    <div class="progress-bar-fill" style="width: ${progress}%"></div>
+                                </div>
+                                <div class="progress-text">${Math.round(progress)}% complete - ${goal.currentCount} of ${goal.targetCount} ${goal.frequency.toLowerCase()}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
             }
         }
     </script>

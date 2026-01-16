@@ -6,6 +6,137 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bible Goals Tracker - Set Goals Rooted in Faith</title>
     <style>
+        /* Navigation Menu Styles */
+        .top-nav {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            margin-bottom: 30px;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .nav-logo-icon {
+            font-size: 28px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #666;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 8px 0;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: #667eea;
+        }
+
+        .nav-link.active {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #667eea;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: white;
+                flex-direction: column;
+                padding: 30px;
+                gap: 20px;
+                transition: left 0.3s ease;
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-link {
+                width: 100%;
+                padding: 15px;
+                text-align: center;
+                border-bottom: 1px solid #f0f0f0;
+            }
+
+            .nav-btn {
+                width: 100%;
+                text-align: center;
+                padding: 15px;
+            }
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -17,6 +148,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 20px;
@@ -161,56 +293,110 @@
 </head>
 
 <body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="nav-logo-icon">📖</span>
+                <span>Bible Goals Tracker</span>
+            </a>
+
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+
+            <div class="nav-links" id="navLinks">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="signin.html" class="nav-link">Dashboard</a>
+                <a href="signin.html" class="nav-link">My Goals</a>
+                <a href="signin.html" class="nav-link">Declarations</a>
+                <a href="signin.html" class="nav-link">Bible Lookup</a>
+                <a href="signin.html" class="nav-link">Profile</a>
+                <a href="signin.html" class="nav-btn">Sign In</a>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
         <div class="logo">📖✨</div>
-        <h1>Bible Goals Tracker</h1>
-        <p class="tagline">Set Goals Rooted in Scripture, Track Progress Through Faith</p>
+        <h1>Spiritual Growth Tracker</h1>
+        <p class="tagline">Master Your Inner Life. Transform from the Inside Out. Steward Your Spiritual Journey with
+            Excellence.</p>
 
         <div class="verse-container">
             <p class="verse-text">
-                "Commit your works to the LORD, and your thoughts will be established."
+                "What gets measured gets managed. What gets managed gets mastered."
             </p>
-            <p class="verse-reference">— Proverbs 16:3 (NKJV)</p>
+            <p class="verse-reference">A unique tracker focused on the inside of you - because lasting change begins
+                within.</p>
         </div>
 
         <div class="features">
             <div class="feature">
-                <div class="feature-icon">🎯</div>
-                <div class="feature-title">Set Faith-Based Goals</div>
-                <div class="feature-desc">Align your annual goals with Biblical principles and scripture</div>
+                <div class="feature-icon">💭</div>
+                <div class="feature-title">Inner Transformation</div>
+                <div class="feature-desc">Focus on renewing your mind, heart, and spirit - the source of all external
+                    change</div>
             </div>
 
             <div class="feature">
-                <div class="feature-icon">📊</div>
-                <div class="feature-title">Track Progress</div>
-                <div class="feature-desc">Monitor your spiritual and personal growth throughout the year</div>
+                <div class="feature-icon">🔥</div>
+                <div class="feature-title">Spiritual Disciplines</div>
+                <div class="feature-desc">Track prayer, fasting, Bible study, meditation - practices that shape your
+                    inner world</div>
             </div>
 
             <div class="feature">
-                <div class="feature-icon">📚</div>
-                <div class="feature-title">Study God's Word</div>
-                <div class="feature-desc">Research Greek, Hebrew & Aramaic definitions of Biblical terms</div>
+                <div class="feature-icon">🌱</div>
+                <div class="feature-title">Character Development</div>
+                <div class="feature-desc">Measure growth in love, patience, faithfulness - the fruit of inner spiritual
+                    work</div>
             </div>
 
             <div class="feature">
-                <div class="feature-icon">🔒</div>
-                <div class="feature-title">Private & Secure</div>
-                <div class="feature-desc">Your goals and progress remain completely confidential</div>
+                <div class="feature-icon">⚡</div>
+                <div class="feature-title">Divine Alignment</div>
+                <div class="feature-desc">Align your inner life with God's Word - where true dominion and authority flow
+                    from</div>
             </div>
         </div>
 
         <div class="cta-buttons">
-            <a href="signin.html" class="btn btn-primary" style="text-decoration: none;">Sign In</a>
-            <a href="goagit add .s.html" class="btn btn-secondary" style="text-decoration: none;">Set Goals</a>
-            <a href="bible-lookup.html" class="btn btn-secondary" style="text-decoration: none;">📖 Bible Lookup</a>
+            <a href="signin.html" class="btn btn-primary">Sign In</a>
+            <a href="signin.html" class="btn btn-secondary">Start Your Inner Journey</a>
+            <a href="signin.html" class="btn btn-secondary">Learn More</a>
         </div>
-
 
         <div class="footer">
-            <p>Powered by faith, built with love ❤️</p>
-            <p>KJV & NKJV translations available</p>
+            <p>Because external results flow from internal reality ⚡</p>
+            <p>Change from the inside out - measure what truly matters</p>
         </div>
     </div>
+
+    <script>
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function (event) {
+            const navLinks = document.getElementById('navLinks');
+            const mobileBtn = document.querySelector('.mobile-menu-btn');
+
+            if (!navLinks.contains(event.target) && !mobileBtn.contains(event.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', function () {
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            navLinks.forEach(link => {
+                const linkPage = link.getAttribute('href');
+                if (linkPage === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
