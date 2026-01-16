@@ -149,13 +149,12 @@
             font-family: 'Georgia', serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding-bottom: 30px;
+            padding: 30px 20px;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
         }
 
         .welcome-banner {
@@ -235,23 +234,20 @@
         }
 
         .stat-trend {
-            background: #e8f5e9;
-            color: #4caf50;
-            padding: 4px 10px;
-            border-radius: 12px;
             font-size: 12px;
+            color: #27ae60;
             font-weight: 600;
         }
 
         .stat-number {
-            font-size: 36px;
-            font-weight: 700;
+            font-size: 42px;
+            font-weight: 600;
             color: #333;
             margin-bottom: 5px;
         }
 
         .stat-label {
-            color: #999;
+            color: #666;
             font-size: 14px;
         }
 
@@ -270,14 +266,13 @@
 
         .card {
             background: white;
-            border-radius: 15px;
+            border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
         .card-title {
-            font-size: 20px;
-            font-weight: 600;
+            font-size: 24px;
             color: #333;
             margin-bottom: 20px;
             display: flex;
@@ -286,10 +281,10 @@
         }
 
         .view-all {
-            color: #667eea;
             font-size: 14px;
+            color: #667eea;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .view-all:hover {
@@ -297,69 +292,65 @@
         }
 
         .goal-item {
+            background: #f8f9fa;
             padding: 20px;
-            border: 1px solid #f0f0f0;
             border-radius: 10px;
             margin-bottom: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .goal-item:hover {
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #667eea;
         }
 
         .goal-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
+            align-items: start;
+            margin-bottom: 10px;
         }
 
         .goal-title {
+            font-size: 18px;
             font-weight: 600;
             color: #333;
-            font-size: 16px;
+            flex: 1;
         }
 
         .goal-status {
             padding: 4px 12px;
-            border-radius: 12px;
+            border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
         }
 
         .status-active {
             background: #e3f2fd;
-            color: #2196f3;
+            color: #1976d2;
         }
 
         .status-completed {
             background: #e8f5e9;
-            color: #4caf50;
+            color: #388e3c;
         }
 
         .goal-progress {
-            margin-top: 10px;
+            margin-top: 12px;
         }
 
         .progress-bar-bg {
-            background: #f0f0f0;
+            background: #e0e0e0;
             height: 8px;
-            border-radius: 10px;
+            border-radius: 4px;
             overflow: hidden;
-            margin-bottom: 8px;
         }
 
         .progress-bar-fill {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             height: 100%;
-            border-radius: 10px;
-            transition: width 0.5s ease;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
         }
 
         .progress-text {
-            font-size: 13px;
+            font-size: 12px;
             color: #666;
+            margin-top: 5px;
         }
 
         .quick-action {
@@ -367,20 +358,29 @@
             align-items: center;
             gap: 15px;
             padding: 15px;
-            border: 1px solid #f0f0f0;
+            background: #f8f9fa;
             border-radius: 10px;
             margin-bottom: 12px;
-            text-decoration: none;
+            cursor: pointer;
             transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
         }
 
         .quick-action:hover {
-            background: #f8f9fa;
-            border-color: #667eea;
+            background: #667eea15;
+            transform: translateX(5px);
         }
 
         .action-icon {
-            font-size: 28px;
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
         }
 
         .action-text {
@@ -390,21 +390,20 @@
         .action-title {
             font-weight: 600;
             color: #333;
-            font-size: 15px;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
         .action-desc {
             font-size: 13px;
-            color: #999;
+            color: #666;
         }
 
         .declaration-widget {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border-radius: 15px;
             padding: 25px;
-            margin-bottom: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
             text-align: center;
         }
 
@@ -417,29 +416,69 @@
         .declaration-widget .text {
             font-size: 20px;
             font-weight: 600;
-            margin-bottom: 15px;
             line-height: 1.5;
+            margin-bottom: 15px;
         }
 
         .speak-mini-btn {
             background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 8px 20px;
+            padding: 10px 20px;
             border-radius: 20px;
             cursor: pointer;
             font-size: 14px;
+            font-weight: 600;
             transition: all 0.3s ease;
         }
 
         .speak-mini-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: white;
+            color: #667eea;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #667eea15;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 3px;
+            font-size: 15px;
+        }
+
+        .activity-time {
+            color: #999;
+            font-size: 13px;
         }
     </style>
 </head>
 
 <body>
-    <!-- Navigation Menu -->
     <nav class="top-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-logo">
@@ -461,18 +500,16 @@
         </div>
     </nav>
 
-    <!-- Dashboard Content -->
     <div class="container">
         <!-- Welcome Banner -->
         <div class="welcome-banner">
             <div class="welcome-text">
-                <h1>Welcome back, <span id="userName">User</span>! 👋</h1>
-                <p id="currentDate">Loading date...</p>
+                <h1>Welcome back, <span id="userName">Bilha</span>! 👋</h1>
+                <p id="currentDate">Friday, January 16, 2026</p>
             </div>
-
             <div class="today-verse">
-                <p class="verse-text">"I can do all things through Christ who strengthens me."</p>
-                <p class="verse-ref">Philippians 4:13</p>
+                <div class="verse-text">"This is the day the LORD has made; we will rejoice and be glad in it."</div>
+                <div class="verse-ref">— Psalm 118:24 (NKJV)</div>
             </div>
         </div>
 
@@ -481,7 +518,7 @@
             <div class="stat-card">
                 <div class="stat-header">
                     <span class="stat-icon">🎯</span>
-                    <span class="stat-trend">Active</span>
+                    <span class="stat-trend">↑ 3 this month</span>
                 </div>
                 <div class="stat-number" id="activeGoals">0</div>
                 <div class="stat-label">Active Goals</div>
@@ -490,20 +527,12 @@
             <div class="stat-card">
                 <div class="stat-header">
                     <span class="stat-icon">✅</span>
-                    <span class="stat-trend">Completed</span>
+                    <span class="stat-trend">↑ 2 this week</span>
                 </div>
                 <div class="stat-number" id="completedGoals">0</div>
-                <div class="stat-label">Completed Goals</div>
+                <div class="stat-label">Completed</div>
             </div>
 
-            <div class="stat-card">
-                <div class="stat-header">
-                    <span class="stat-icon">🔥</span>
-                    <span class="stat-trend">↑ 5</span>
-                </div>
-                <div class="stat-number">25</div>
-                <div class="stat-label">Day Streak</div>
-            </div>
 
             <div class="stat-card">
                 <div class="stat-header">
