@@ -292,12 +292,12 @@
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('userEmail', email);
 
-            // Check if username is set
-            const usernameSet = localStorage.getItem('usernameSet');
-            if (usernameSet) {
+            // Check if profile is complete
+            const profileComplete = localStorage.getItem('profileComplete');
+            if (profileComplete) {
                 window.location.href = 'dashboard.html';
             } else {
-                window.location.href = 'username-setup.html';
+                window.location.href = 'profile-setup.html';
             }
         }
 
@@ -327,12 +327,12 @@
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('userEmail', email);
 
-            // Check if username is set
-            const usernameSet = localStorage.getItem('usernameSet');
-            if (usernameSet) {
+            // Check if profile is complete
+            const profileComplete = localStorage.getItem('profileComplete');
+            if (profileComplete) {
                 window.location.href = 'dashboard.html';
             } else {
-                window.location.href = 'username-setup.html';
+                window.location.href = 'profile-setup.html';
             }
         }
     </script>
