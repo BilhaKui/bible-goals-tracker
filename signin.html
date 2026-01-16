@@ -222,8 +222,21 @@
         }
 
         function validateEmail(email) {
+            // Check basic format
             const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
+            if (!re.test(email)) return false;
+
+            // Block common fake domains
+            const fakeDomains = ['test.com', 'example.com', 'fake.com', 'temp.com', 'invalid.com'];
+            const domain = email.split('@')[1].toLowerCase();
+
+            if (fakeDomains.includes(domain)) return false;
+
+            // Must have valid TLD
+            const parts = domain.split('.');
+            if (parts[parts.length - 1].length < 2) return false;
+
+            return true;
         }
 
         async function saveToGoogleSheets(email, name, method) {
