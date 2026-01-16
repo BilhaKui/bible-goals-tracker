@@ -277,11 +277,15 @@
 
             // Log in user
             localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('userName', name);
             localStorage.setItem('userEmail', email);
 
-            // Redirect
-            window.location.href = 'dashboard.html';
+            // Check if username is set
+            const usernameSet = localStorage.getItem('usernameSet');
+            if (usernameSet) {
+                window.location.href = 'dashboard.html';
+            } else {
+                window.location.href = 'username-setup.html';
+            }
         }
 
         async function handleEmailSignIn(event) {
@@ -308,11 +312,15 @@
 
             // Log in user
             localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('userName', name);
             localStorage.setItem('userEmail', email);
 
-            // Redirect
-            window.location.href = 'dashboard.html';
+            // Check if username is set
+            const usernameSet = localStorage.getItem('usernameSet');
+            if (usernameSet) {
+                window.location.href = 'dashboard.html';
+            } else {
+                window.location.href = 'username-setup.html';
+            }
         }
     </script>
 </body>
