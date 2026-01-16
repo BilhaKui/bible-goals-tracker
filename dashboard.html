@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Bible Goals Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .welcome-banner {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .welcome-text h1 {
+            color: #333;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .welcome-text p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .today-verse {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+        }
+
+        .verse-text {
+            font-size: 15px;
+            color: #555;
+            font-style: italic;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .verse-ref {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .stat-icon {
+            font-size: 32px;
+        }
+
+        .stat-trend {
+            font-size: 12px;
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .stat-number {
+            font-size: 42px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 968px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .view-all {
+            font-size: 14px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .view-all:hover {
+            text-decoration: underline;
+        }
+
+        .goal-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 10px;
+        }
+
+        .goal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            flex: 1;
+        }
+
+        .goal-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status-completed {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .goal-progress {
+            margin-top: 12px;
+        }
+
+        .progress-bar-bg {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .quick-action {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .quick-action:hover {
+            background: #667eea15;
+            transform: translateX(5px);
+        }
+
+        .action-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .action-text {
+            flex: 1;
+        }
+
+        .action-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .action-desc {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .declaration-widget {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .declaration-widget h4 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .declaration-widget .text {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .speak-mini-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .speak-mini-btn:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #667eea15;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 3px;
+            font-size: 15px;
+        }
+
+        .activity-time {
+            color: #999;
+            font-size: 13px;
+        }
+
+        .nav-links {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <div class="welcome-text">
+                <h1>Welcome back, Bilha! 👋</h1>
+                <p id="currentDate">Friday, January 16, 2026</p>
+            </div>
+            <div class="today-verse">
+                <div class="verse-text">"This is the day the LORD has made; we will rejoice and be glad in it."</div>
+                <div class="verse-ref">— Psalm 118:24 (NKJV)</div>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🎯</span>
+                    <span class="stat-trend">↑ 3 this month</span>
+                </div>
+                <div class="stat-number">12</div>
+                <div class="stat-label">Active Goals</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">✅</span>
+                    <span class="stat-trend">↑ 2 this week</span>
+                </div>
+                <div class="stat-number">8</div>
+                <div class="stat-label">Completed</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🔥</span>
+                    <span class="stat-trend">Keep it up!</span>
+                </div>
+                <div class="stat-number">25</div>
+                <div class="stat-label">Day Streak</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">📈</span>
+                    <span class="stat-trend">↑ 12%</span>
+                </div>
+                <div class="stat-number">67%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Column: Recent Goals -->
+            <div class="card">
+                <div class="card-title">
+                    <span>📋 Recent Goals</span>
+                    <a href="goals.html" class="view-all">View All →</a>
+                </div>
+
+                <div class="goal-item">
+                    <div class="goal-header">
+                        <div class="goal-title">Read the Bible daily</div>
+                        <span class="goal-status status-active">Active</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: 75%"></div>
+                        </div>
+                        <div class="progress-text">75% complete - 22 of 30 days</div>
+                    </div>
+                </div>
+
+                <div class="goal-item">
+                    <div class="goal-header">
+                        <div class="goal-title">Serve in community outreach</div>
+                        <span class="goal-status status-active">Active</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: 40%"></div>
+                        </div>
+                        <div class="progress-text">40% complete - 4 of 10 events</div>
+                    </div>
+                </div>
+
+                <div class="goal-item">
+                    <div class="goal-header">
+                        <div class="goal-title">Memorize Psalm 23</div>
+                        <span class="goal-status status-completed">Completed</span>
+                    </div>
+                    <div class="goal-progress">
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: 100%"></div>
+                        </div>
+                        <div class="progress-text">100% complete - Finished Jan 10</div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div style="margin-top: 40px;">
+                    <div class="card-title">📌 Recent Activity</div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon">✅</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Completed goal: Memorize Psalm 23</div>
+                            <div class="activity-time">6 days ago</div>
+                        </div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon">➕</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Created new goal: Daily prayer journal</div>
+                            <div class="activity-time">1 week ago</div>
+                        </div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon">📖</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Searched Bible verse: Philippians 4:13</div>
+                            <div class="activity-time">1 week ago</div>
+                        </div>
+                    </div>
+
+                    <div class="activity-item">
+                        <div class="activity-icon">🗣️</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Updated daily declarations</div>
+                            <div class="activity-time">2 weeks ago</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Quick Actions & Declaration -->
+            <div>
+                <!-- Today's Declaration -->
+                <div class="declaration-widget">
+                    <h4>✨ Today's Declaration</h4>
+                    <div class="text" id="todayDeclaration">I am more than a conqueror through Christ</div>
+                    <button class="speak-mini-btn" onclick="speakDeclaration()">🔊 Speak It</button>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card">
+                    <div class="card-title">⚡ Quick Actions</div>
+
+                    <a href="goals.html" class="quick-action">
+                        <div class="action-icon">🎯</div>
+                        <div class="action-text">
+                            <div class="action-title">Create New Goal</div>
+                            <div class="action-desc">Set a new faith-based goal</div>
+                        </div>
+                    </a>
+
+                    <a href="declarations.html" class="quick-action">
+                        <div class="action-icon">✨</div>
+                        <div class="action-text">
+                            <div class="action-title">View Declarations</div>
+                            <div class="action-desc">Read your daily declarations</div>
+                        </div>
+                    </a>
+
+                    <a href="bible-lookup.html" class="quick-action">
+                        <div class="action-icon">📖</div>
+                        <div class="action-text">
+                            <div class="action-title">Search Scripture</div>
+                            <div class="action-desc">Look up Bible verses</div>
+                        </div>
+                    </a>
+
+                    <a href="profile.html" class="quick-action">
+                        <div class="action-icon">👤</div>
+                        <div class="action-text">
+                            <div class="action-title">Edit Profile</div>
+                            <div class="action-desc">Update your information</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html">← Home</a>
+            <a href="goals.html">My Goals</a>
+            <a href="declarations.html">Declarations</a>
+            <a href="bible-lookup.html">Bible Lookup</a>
+            <a href="profile.html">Profile</a>
+        </div>
+    </div>
+
+    <script>
+        // Display current date
+        const today = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('currentDate').textContent = today.toLocaleDateString('en-US', options);
+
+        // Rotate daily declaration
+        const declarations = [
+            "I am more than a conqueror through Christ",
+            "God's favor surrounds me like a shield",
+            "I walk in divine purpose and calling",
+            "Every obstacle becomes an opportunity",
+            "God is working all things for my good"
+        ];
+
+        const dayOfWeek = today.getDay();
+        const rotatingIndex = dayOfWeek % 5;
+        document.getElementById('todayDeclaration').textContent = declarations[rotatingIndex];
+
+        function speakDeclaration() {
+            const declaration = document.getElementById('todayDeclaration').textContent;
+
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(declaration);
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('🗣️ Speak this aloud:\n\n"' + declaration + '"');
+            }
+        }
+    </script>
+</body>
+
+</html>

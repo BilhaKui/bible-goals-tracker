@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Declarations - Bible Goals Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .verse-box {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-left: 4px solid #667eea;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 10px;
+        }
+
+        .verse-text {
+            font-size: 18px;
+            color: #555;
+            font-style: italic;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        .verse-reference {
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .declaration-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .declaration-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .declaration-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .declaration-text {
+            font-size: 24px;
+            color: #333;
+            line-height: 1.6;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .declaration-scripture {
+            color: #667eea;
+            font-size: 16px;
+            font-style: italic;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .daily-focus {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .daily-focus h2 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .today-declaration {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .today-declaration .text {
+            font-size: 28px;
+            color: #333;
+            font-weight: 600;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .today-date {
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .speak-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .speak-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-links {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        .tips-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .tips-card h3 {
+            color: #333;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .tip-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: start;
+        }
+
+        .tip-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .tip-text {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 20px;
+            }
+
+            .action-buttons,
+            .nav-links,
+            .tips-card {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✨ My Daily Declarations</h1>
+            <p class="subtitle">Speak these faith-filled words over your life every day</p>
+
+            <div class="verse-box">
+                <p class="verse-text">
+                    "Death and life are in the power of the tongue, and those who love it will eat its fruit."
+                </p>
+                <p class="verse-reference">— Proverbs 18:21 (NKJV)</p>
+            </div>
+        </div>
+
+        <!-- Today's Declaration Focus -->
+        <div class="daily-focus">
+            <h2>🌅 Today's Declaration</h2>
+            <p class="today-date" id="todayDate">Friday, January 16, 2026</p>
+
+            <div class="today-declaration">
+                <div class="text" id="todayDeclaration">
+                    "I am more than a conqueror through Christ who strengthens me"
+                </div>
+            </div>
+
+            <button class="speak-btn" onclick="speakDeclaration()">🔊 Speak It Aloud</button>
+        </div>
+
+        <!-- All 5 Declarations -->
+        <div class="declaration-card">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div class="declaration-number">1</div>
+                <div style="flex: 1;">
+                    <div class="declaration-text">I am more than a conqueror through Christ who strengthens me</div>
+                    <div class="declaration-scripture">Romans 8:37</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="declaration-card">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div class="declaration-number">2</div>
+                <div style="flex: 1;">
+                    <div class="declaration-text">God's favor surrounds me like a shield</div>
+                    <div class="declaration-scripture">Psalm 5:12</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="declaration-card">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div class="declaration-number">3</div>
+                <div style="flex: 1;">
+                    <div class="declaration-text">I walk in divine purpose and calling</div>
+                    <div class="declaration-scripture">Ephesians 2:10</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="declaration-card">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div class="declaration-number">4</div>
+                <div style="flex: 1;">
+                    <div class="declaration-text">Every obstacle becomes an opportunity for God's glory</div>
+                    <div class="declaration-scripture">Romans 8:28</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="declaration-card">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div class="declaration-number">5</div>
+                <div style="flex: 1;">
+                    <div class="declaration-text">God is working all things together for my good</div>
+                    <div class="declaration-scripture">Romans 8:28</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips -->
+        <div class="tips-card">
+            <h3>💡 How to Use Your Declarations</h3>
+
+            <div class="tip-item">
+                <div class="tip-icon">🌅</div>
+                <div class="tip-text">
+                    <strong>Start Your Day:</strong> Speak all 5 declarations aloud each morning to set the tone for
+                    your day
+                </div>
+            </div>
+
+            <div class="tip-item">
+                <div class="tip-icon">🗣️</div>
+                <div class="tip-text">
+                    <strong>Say It With Faith:</strong> Don't just read them - declare them boldly and believe what
+                    you're saying
+                </div>
+            </div>
+
+            <div class="tip-item">
+                <div class="tip-icon">📖</div>
+                <div class="tip-text">
+                    <strong>Meditate on Scripture:</strong> Look up the Bible verses connected to each declaration
+                </div>
+            </div>
+
+            <div class="tip-item">
+                <div class="tip-icon">💪</div>
+                <div class="tip-text">
+                    <strong>In Difficult Moments:</strong> When facing challenges, speak these declarations over your
+                    situation
+                </div>
+            </div>
+
+            <div class="tip-item">
+                <div class="tip-icon">📝</div>
+                <div class="tip-text">
+                    <strong>Personalize Them:</strong> Edit your declarations in your profile to make them more specific
+                    to your journey
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="window.print()">🖨️ Print Declarations</button>
+            <button class="btn btn-secondary" onclick="shareDeclarations()">📤 Share</button>
+            <button class="btn btn-secondary" onclick="window.location.href='profile.html'">✏️ Edit My
+                Declarations</button>
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html">← Home</a>
+            <a href="goals.html">My Goals</a>
+            <a href="profile.html">Profile</a>
+            <a href="bible-lookup.html">Bible Lookup</a>
+        </div>
+    </div>
+
+    <script>
+        // Display today's date
+        const today = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('todayDate').textContent = today.toLocaleDateString('en-US', options);
+
+        // Rotate daily declaration (changes based on day of week)
+        const declarations = [
+            "I am more than a conqueror through Christ who strengthens me",
+            "God's favor surrounds me like a shield",
+            "I walk in divine purpose and calling",
+            "Every obstacle becomes an opportunity for God's glory",
+            "God is working all things together for my good"
+        ];
+
+        const dayOfWeek = today.getDay();
+        const rotatingIndex = dayOfWeek % 5;
+        document.getElementById('todayDeclaration').textContent = declarations[rotatingIndex];
+
+        function speakDeclaration() {
+            const declaration = document.getElementById('todayDeclaration').textContent;
+
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(declaration);
+                utterance.rate = 0.9;
+                utterance.pitch = 1;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('🗣️ Speak this declaration aloud:\n\n"' + declaration + '"');
+            }
+        }
+
+        function shareDeclarations() {
+            const text = `My Daily Declarations:\n\n` +
+                `1. I am more than a conqueror through Christ who strengthens me\n` +
+                `2. God's favor surrounds me like a shield\n` +
+                `3. I walk in divine purpose and calling\n` +
+                `4. Every obstacle becomes an opportunity for God's glory\n` +
+                `5. God is working all things together for my good\n\n` +
+                `Join me at Bible Goals Tracker!`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My Daily Declarations',
+                    text: text
+                }).catch(() => {
+                    copyToClipboard(text);
+                });
+            } else {
+                copyToClipboard(text);
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✓ Declarations copied to clipboard! You can now paste and share them.');
+            }).catch(() => {
+                alert('Here are your declarations to share:\n\n' + text);
+            });
+        }
+    </script>
+</body>
+
+</html>

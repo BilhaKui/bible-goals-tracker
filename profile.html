@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Bible Goals Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            color: white;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 28px;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .profile-email {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .member-since {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .section-title {
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Georgia', serif;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-danger {
+            background: white;
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .preference-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .preference-label {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .preference-desc {
+            color: #666;
+            font-size: 13px;
+            margin-top: 3px;
+        }
+
+        .toggle {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #667eea;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(24px);
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .nav-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        .danger-zone {
+            background: #fff5f5;
+            border: 2px solid #fee;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .danger-zone h3 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+
+        .danger-zone p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👤 My Profile</h1>
+            <p class="subtitle">Manage your account and preferences</p>
+        </div>
+
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="avatar" id="avatar">B</div>
+                <div class="profile-info">
+                    <div class="profile-name" id="displayName">Bilha Kui</div>
+                    <div class="profile-email" id="displayEmail">bilha@example.com</div>
+                    <div class="member-since">Member since January 2026</div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Active Goals</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">25</div>
+                    <div class="stat-label">Days Active</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">67%</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+            </div>
+
+            <div id="message" class="message"></div>
+
+            <!-- Personal Information -->
+            <h2 class="section-title">📝 Personal Information</h2>
+            <form id="profileForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" value="Bilha Kui">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" value="bilha@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">Bio / Personal Note</label>
+                    <textarea id="bio"
+                        placeholder="Share a little about your faith journey...">Seeking to grow closer to God through intentional goal-setting and daily devotion.</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="favoriteVerse">Favorite Bible Verse</label>
+                    <input type="text" id="favoriteVerse" value="Philippians 4:13" placeholder="e.g., John 3:16">
+                </div>
+
+                <div class="btn-container">
+                    <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">↺ Reset</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Preferences -->
+        <div class="profile-card">
+            <h2 class="section-title">⚙️ Preferences</h2>
+
+            <div class="preference-item">
+                <div>
+                    <div class="preference-label">Email Notifications</div>
+                    <div class="preference-desc">Receive reminders and updates via email</div>
+                </div>
+                <label class="toggle">
+                    <input type="checkbox" checked onchange="togglePreference('email')">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="preference-item">
+                <div>
+                    <div class="preference-label">Daily Declarations</div>
+                    <div class="preference-desc">Receive faith-based declarations to speak over your life</div>
+                </div>
+                <label class="toggle">
+                    <input type="checkbox" checked onchange="togglePreference('declarations')">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="preference-item">
+                <div>
+                    <div class="preference-label">Goal Reminders</div>
+                    <div class="preference-desc">Weekly reminders to track your progress</div>
+                </div>
+                <label class="toggle">
+                    <input type="checkbox" onchange="togglePreference('reminders')">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <h3 style="color: #333; font-size: 18px; margin-bottom: 15px;">✨ My Personal Declarations</h3>
+                <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Create 5 faith declarations to speak over
+                    your life daily</p>
+
+                <div class="form-group">
+                    <label for="declaration1">Declaration 1</label>
+                    <input type="text" id="declaration1" placeholder="I am fearfully and wonderfully made"
+                        value="I am more than a conqueror through Christ">
+                </div>
+
+                <div class="form-group">
+                    <label for="declaration2">Declaration 2</label>
+                    <input type="text" id="declaration2" placeholder="God's favor surrounds me like a shield"
+                        value="God's favor surrounds me like a shield">
+                </div>
+
+                <div class="form-group">
+                    <label for="declaration3">Declaration 3</label>
+                    <input type="text" id="declaration3" placeholder="I can do all things through Christ"
+                        value="I walk in divine purpose and calling">
+                </div>
+
+                <div class="form-group">
+                    <label for="declaration4">Declaration 4</label>
+                    <input type="text" id="declaration4" placeholder="My steps are ordered by the Lord"
+                        value="Every obstacle becomes an opportunity">
+                </div>
+
+                <div class="form-group">
+                    <label for="declaration5">Declaration 5</label>
+                    <input type="text" id="declaration5" placeholder="I am blessed to be a blessing"
+                        value="God is working all things for my good">
+                </div>
+
+                <button type="button" class="btn btn-primary" onclick="saveDeclarations()" style="margin-top: 10px;">💾
+                    Save My Declarations</button>
+            </div>
+        </div>
+
+        <!-- Change Password -->
+        <div class="profile-card">
+            <h2 class="section-title">🔒 Change Password</h2>
+            <form id="passwordForm">
+                <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword" placeholder="Enter current password">
+                </div>
+
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" placeholder="Enter new password">
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm New Password</label>
+                    <input type="password" id="confirmPassword" placeholder="Re-enter new password">
+                </div>
+
+                <div class="btn-container">
+                    <button type="submit" class="btn btn-primary">🔑 Update Password</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="profile-card">
+            <div class="danger-zone">
+                <h3>⚠️ Danger Zone</h3>
+                <p>Once you delete your account, there is no going back. All your goals and data will be permanently
+                    deleted.</p>
+                <button class="btn btn-danger" onclick="deleteAccount()">Delete Account</button>
+            </div>
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html">← Home</a>
+            <a href="goals.html">My Goals</a>
+            <a href="bible-lookup.html">Bible Lookup</a>
+        </div>
+    </div>
+
+    <script>
+        // Update avatar initial when name changes
+        document.getElementById('fullName').addEventListener('input', function () {
+            const name = this.value.trim();
+            const initial = name.charAt(0).toUpperCase() || 'U';
+            document.getElementById('avatar').textContent = initial;
+        });
+
+        // Save profile changes
+        document.getElementById('profileForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+
+            // Update display
+            document.getElementById('displayName').textContent = fullName;
+            document.getElementById('displayEmail').textContent = email;
+
+            showMessage('✓ Profile updated successfully!', 'success');
+        });
+
+        // Change password
+        document.getElementById('passwordForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                showMessage('✗ Please fill in all password fields', 'error');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showMessage('✗ New passwords do not match', 'error');
+                return;
+            }
+
+            if (newPassword.length < 8) {
+                showMessage('✗ Password must be at least 8 characters', 'error');
+                return;
+            }
+
+            showMessage('✓ Password updated successfully!', 'success');
+            this.reset();
+        });
+
+        function resetForm() {
+            document.getElementById('profileForm').reset();
+            showMessage('Form reset to original values', 'success');
+        }
+
+        function togglePreference(type) {
+            showMessage(`✓ ${type.charAt(0).toUpperCase() + type.slice(1)} preference updated`, 'success');
+        }
+
+        function saveDeclarations() {
+            const declarations = [];
+            for (let i = 1; i <= 5; i++) {
+                const value = document.getElementById(`declaration${i}`).value.trim();
+                if (value) {
+                    declarations.push(value);
+                }
+            }
+
+            if (declarations.length === 0) {
+                showMessage('✗ Please enter at least one declaration', 'error');
+                return;
+            }
+
+            showMessage(`✓ ${declarations.length} declaration(s) saved successfully!`, 'success');
+        }
+
+        function deleteAccount() {
+            const confirmed = confirm('Are you absolutely sure? This action cannot be undone. All your goals and data will be permanently deleted.');
+
+            if (confirmed) {
+                const doubleCheck = confirm('Final confirmation: Delete your account and all data permanently?');
+
+                if (doubleCheck) {
+                    alert('Account deletion feature coming soon. In the full version, your account would be deleted and you\'d be logged out.');
+                }
+            }
+        }
+
+        function showMessage(text, type) {
+            const messageBox = document.getElementById('message');
+            messageBox.textContent = text;
+            messageBox.className = 'message ' + type;
+            messageBox.style.display = 'block';
+
+            setTimeout(() => {
+                messageBox.style.display = 'none';
+            }, 4000);
+        }
+    </script>
+</body>
+
+</html>
