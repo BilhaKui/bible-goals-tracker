@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Your Goals - Bible Goals Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .verse-box {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+        }
+
+        .verse-text {
+            font-size: 16px;
+            color: #555;
+            font-style: italic;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Georgia', serif;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .helper-text {
+            font-size: 13px;
+            color: #999;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .category-option {
+            padding: 12px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-option:hover {
+            background: #667eea15;
+            border-color: #667eea;
+        }
+
+        .category-option input[type="radio"] {
+            display: none;
+        }
+
+        .category-option input[type="radio"]:checked+.category-label {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .category-option input[type="radio"]:checked~.category-icon {
+            transform: scale(1.2);
+        }
+
+        .category-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .category-label {
+            display: block;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .goals-list {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-top: 30px;
+        }
+
+        .goals-list h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .goal-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .goal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .goal-scripture {
+            color: #667eea;
+            font-size: 14px;
+            font-style: italic;
+            margin-bottom: 8px;
+        }
+
+        .goal-category {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .nav-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 Set Your Goals</h1>
+            <p class="subtitle">Align your ambitions with God's Word</p>
+        </div>
+
+        <div class="form-card">
+            <div class="verse-box">
+                <p class="verse-text">
+                    "I press toward the goal for the prize of the upward call of God in Christ Jesus."
+                    <br><strong>— Philippians 3:14 (NKJV)</strong>
+                </p>
+            </div>
+
+            <form id="goalForm">
+                <div class="form-group">
+                    <label for="goalTitle">Goal Title <span class="required">*</span></label>
+                    <input type="text" id="goalTitle" placeholder="e.g., Read the Bible daily, Serve in my community"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="goalDescription">Description</label>
+                    <textarea id="goalDescription"
+                        placeholder="Describe your goal in detail. What do you hope to achieve?"></textarea>
+                    <p class="helper-text">Share your vision and how this goal aligns with your faith</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Category <span class="required">*</span></label>
+                    <div class="category-grid">
+                        <label class="category-option">
+                            <input type="radio" name="category" value="Spiritual Growth" required>
+                            <div class="category-icon">🙏</div>
+                            <span class="category-label">Spiritual Growth</span>
+                        </label>
+                        <label class="category-option">
+                            <input type="radio" name="category" value="Bible Study">
+                            <div class="category-icon">📖</div>
+                            <span class="category-label">Bible Study</span>
+                        </label>
+                        <label class="category-option">
+                            <input type="radio" name="category" value="Service">
+                            <div class="category-icon">❤️</div>
+                            <span class="category-label">Service</span>
+                        </label>
+                        <label class="category-option">
+                            <input type="radio" name="category" value="Character">
+                            <div class="category-icon">✨</div>
+                            <span class="category-label">Character</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="scripture">Scripture Reference</label>
+                    <input type="text" id="scripture" placeholder="e.g., Philippians 4:13, Proverbs 3:5-6">
+                    <p class="helper-text">Which Bible verse inspires or guides this goal?</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="targetDate">Target Completion</label>
+                    <input type="text" id="targetDate" placeholder="e.g., December 2026, End of Year">
+                </div>
+
+                <div class="btn-container">
+                    <button type="submit" class="btn btn-primary">💾 Save Goal</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">Clear Form</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="goals-list">
+            <h2>Your Goals for 2026</h2>
+            <div id="goalsList" class="empty-state">
+                <p>📋 No goals yet. Create your first goal above!</p>
+            </div>
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html">← Home</a>
+            <a href="login.html">Login</a>
+        </div>
+    </div>
+
+    <script>
+        let goals = [];
+
+        document.getElementById('goalForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const goal = {
+                id: Date.now(),
+                title: document.getElementById('goalTitle').value,
+                description: document.getElementById('goalDescription').value,
+                category: document.querySelector('input[name="category"]:checked').value,
+                scripture: document.getElementById('scripture').value,
+                targetDate: document.getElementById('targetDate').value,
+                createdAt: new Date().toLocaleDateString()
+            };
+
+            goals.push(goal);
+            displayGoals();
+            resetForm();
+
+            alert('✓ Goal saved successfully!');
+        });
+
+        function displayGoals() {
+            const goalsList = document.getElementById('goalsList');
+
+            if (goals.length === 0) {
+                goalsList.innerHTML = '<div class="empty-state"><p>📋 No goals yet. Create your first goal above!</p></div>';
+                return;
+            }
+
+            goalsList.innerHTML = goals.map(goal => `
+                <div class="goal-item">
+                    <div class="goal-title">${goal.title}</div>
+                    ${goal.scripture ? `<div class="goal-scripture">📖 ${goal.scripture}</div>` : ''}
+                    ${goal.description ? `<p style="color: #666; font-size: 14px; margin-top: 8px;">${goal.description}</p>` : ''}
+                    <div style="margin-top: 10px;">
+                        <span class="goal-category">${goal.category}</span>
+                        ${goal.targetDate ? `<span style="color: #999; font-size: 12px; margin-left: 10px;">Target: ${goal.targetDate}</span>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function resetForm() {
+            document.getElementById('goalForm').reset();
+        }
+    </script>
+</body>
+
+</html>
