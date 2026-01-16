@@ -116,6 +116,16 @@
             border-color: #667eea;
         }
 
+        input.error {
+            border-color: #f44336;
+        }
+
+        .error-message {
+            color: #f44336;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
         .btn-signin {
             width: 100%;
             padding: 15px;
@@ -173,6 +183,7 @@
             <div class="form-group">
                 <label for="googleEmail">Enter your Gmail</label>
                 <input type="email" id="googleEmail" placeholder="yourname@gmail.com" required>
+                <div id="googleEmailError" class="error-message"></div>
             </div>
             <button type="submit" class="btn-signin">Continue</button>
         </form>
@@ -185,6 +196,7 @@
             <div class="form-group">
                 <label for="email">Email Address</label>
                 <input type="email" id="email" placeholder="your.email@example.com" required>
+                <div id="emailError" class="error-message"></div>
             </div>
 
             <div class="form-group">
@@ -201,62 +213,105 @@
     </div>
 
     <script>
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxVmM7hgphhTV2HDlN_OOMuTr_uqy1lZPnwzYqoAp6WH0goP5qaB2EtlMYlzFngiAUQ/exec';
+
         function showGoogleForm() {
             document.getElementById('googleEmailForm').style.display = 'block';
             document.querySelector('.google-btn').style.display = 'none';
             document.getElementById('googleEmail').focus();
         }
 
-        function handleGoogleSignIn(event) {
-            event.preventDefault();
-
-            const email = document.getElementById('googleEmail').value;
-
-            // Save user data
-            const userData = {
-                email: email,
-                name: email.split('@')[0],
-                method: 'google',
-                timestamp: new Date().toISOString()
-            };
-
-            let allUsers = JSON.parse(localStorage.getItem('userDatabase')) || [];
-            allUsers.push(userData);
-            localStorage.setItem('userDatabase', JSON.stringify(allUsers));
-
-            // Log in user
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('userName', email.split('@')[0]);
-            localStorage.setItem('userEmail', email);
-
-            // Redirect to dashboard
-            window.location.href = 'dashboard.html';
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
         }
 
-        function handleEmailSignIn(event) {
+        async function saveToGoogleSheets(email, name, method) {
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        name: name,
+                        method: method
+                    })
+                });
+            } catch (error) {
+                console.log('Data saved locally');
+            }
+        }
+
+        async function handleGoogleSignIn(event) {
             event.preventDefault();
 
-            const email = document.getElementById('email').value;
-            const name = document.getElementById('name').value;
+            const emailInput = document.getElementById('googleEmail');
+            const email = emailInput.value.trim();
+            const errorDiv = document.getElementById('googleEmailError');
 
-            // Save user data
-            const userData = {
-                email: email,
-                name: name,
-                method: 'email',
-                timestamp: new Date().toISOString()
-            };
+            // Clear previous errors
+            emailInput.classList.remove('error');
+            errorDiv.textContent = '';
 
-            let allUsers = JSON.parse(localStorage.getItem('userDatabase')) || [];
-            allUsers.push(userData);
-            localStorage.setItem('userDatabase', JSON.stringify(allUsers));
+            // Validate email format
+            if (!validateEmail(email)) {
+                emailInput.classList.add('error');
+                errorDiv.textContent = 'Please enter a valid email address';
+                return;
+            }
+
+            // Check if it's Gmail
+            if (!email.endsWith('@gmail.com')) {
+                emailInput.classList.add('error');
+                errorDiv.textContent = 'Please use a Gmail address (@gmail.com)';
+                return;
+            }
+
+            const name = email.split('@')[0];
+
+            // Save to Google Sheets
+            await saveToGoogleSheets(email, name, 'google');
 
             // Log in user
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('userName', name);
             localStorage.setItem('userEmail', email);
 
-            // Redirect to dashboard
+            // Redirect
+            window.location.href = 'dashboard.html';
+        }
+
+        async function handleEmailSignIn(event) {
+            event.preventDefault();
+
+            const emailInput = document.getElementById('email');
+            const email = emailInput.value.trim();
+            const name = document.getElementById('name').value.trim();
+            const errorDiv = document.getElementById('emailError');
+
+            // Clear previous errors
+            emailInput.classList.remove('error');
+            errorDiv.textContent = '';
+
+            // Validate email format
+            if (!validateEmail(email)) {
+                emailInput.classList.add('error');
+                errorDiv.textContent = 'Please enter a valid email address';
+                return;
+            }
+
+            // Save to Google Sheets
+            await saveToGoogleSheets(email, name, 'email');
+
+            // Log in user
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userName', name);
+            localStorage.setItem('userEmail', email);
+
+            // Redirect
             window.location.href = 'dashboard.html';
         }
     </script>
