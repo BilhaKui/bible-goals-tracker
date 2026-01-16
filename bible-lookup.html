@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible Verse Lookup - Bible Goals Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .search-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Georgia', serif;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-search {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .helper-text {
+            color: #999;
+            font-size: 14px;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .examples {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .example-chip {
+            background: #f0f0f0;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .example-chip:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .results-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .verse-display {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-left: 4px solid #667eea;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .verse-text {
+            font-size: 20px;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .verse-reference {
+            font-size: 16px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .translation-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .translation-btn {
+            padding: 10px 20px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .translation-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .word-study {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 25px;
+        }
+
+        .word-study h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .word-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 3px solid #667eea;
+        }
+
+        .word-original {
+            font-size: 18px;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .word-transliteration {
+            font-size: 14px;
+            color: #999;
+            font-style: italic;
+            margin-bottom: 8px;
+        }
+
+        .word-definition {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-action {
+            padding: 12px 25px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-action:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .nav-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📖 Bible Verse Lookup</h1>
+            <p class="subtitle">Search Scripture & Study Original Languages</p>
+        </div>
+
+        <div class="search-card">
+            <div class="search-box">
+                <input type="text" id="verseInput" class="search-input"
+                    placeholder="Enter verse reference (e.g., John 3:16, Psalm 23:1)"
+                    onkeypress="if(event.key==='Enter') searchVerse()">
+                <button class="btn-search" onclick="searchVerse()">🔍 Search</button>
+            </div>
+            <p class="helper-text">Enter book, chapter, and verse (e.g., Genesis 1:1, Romans 8:28)</p>
+
+            <div class="examples">
+                <span class="example-chip" onclick="fillExample('John 3:16')">John 3:16</span>
+                <span class="example-chip" onclick="fillExample('Psalm 23:1')">Psalm 23:1</span>
+                <span class="example-chip" onclick="fillExample('Proverbs 3:5-6')">Proverbs 3:5-6</span>
+                <span class="example-chip" onclick="fillExample('Philippians 4:13')">Philippians 4:13</span>
+                <span class="example-chip" onclick="fillExample('Romans 8:28')">Romans 8:28</span>
+            </div>
+        </div>
+
+        <div class="results-card" id="resultsCard">
+            <div class="translation-selector">
+                <button class="translation-btn active" onclick="switchTranslation('KJV')">KJV</button>
+                <button class="translation-btn" onclick="switchTranslation('NKJV')">NKJV</button>
+            </div>
+
+            <div id="verseDisplay"></div>
+
+            <div class="word-study">
+                <h3>📚 Original Language Study</h3>
+                <p style="color: #666; margin-bottom: 20px;">Key words from this passage with Greek/Hebrew definitions:
+                </p>
+                <div id="wordStudy"></div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn-action" onclick="copyVerse()">📋 Copy Verse</button>
+                <button class="btn-action" onclick="addToGoals()">➕ Add to Goals</button>
+                <button class="btn-action" onclick="searchAnother()">🔍 Search Another</button>
+            </div>
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html">← Home</a>
+            <a href="goals.html">My Goals</a>
+            <a href="login.html">Login</a>
+        </div>
+    </div>
+
+    <script>
+        // Sample Bible verses database (in a real app, this would connect to a Bible API)
+        const sampleVerses = {
+            'john 3:16': {
+                kjv: 'For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.',
+                nkjv: 'For God so loved the world that He gave His only begotten Son, that whoever believes in Him should not perish but have everlasting life.',
+                reference: 'John 3:16',
+                words: [
+                    { original: 'ἀγαπάω', transliteration: 'agapaō', definition: 'To love with divine love; unconditional, sacrificial love (Strong\'s G25)' },
+                    { original: 'κόσμος', transliteration: 'kosmos', definition: 'World, universe; the created order; humanity (Strong\'s G2889)' },
+                    { original: 'πιστεύω', transliteration: 'pisteuō', definition: 'To believe, have faith, trust in; to be convinced of (Strong\'s G4100)' }
+                ]
+            },
+            'psalm 23:1': {
+                kjv: 'The LORD is my shepherd; I shall not want.',
+                nkjv: 'The LORD is my shepherd; I shall not want.',
+                reference: 'Psalm 23:1',
+                words: [
+                    { original: 'יְהוָה', transliteration: 'YHWH (Yahweh)', definition: 'The LORD; the covenant name of God; "I AM WHO I AM" (Strong\'s H3068)' },
+                    { original: 'רָעָה', transliteration: 'ra\'ah', definition: 'To shepherd, tend, pasture; to feed, lead, guide (Strong\'s H7462)' },
+                    { original: 'חָסֵר', transliteration: 'chaser', definition: 'To lack, be without, decrease; to be in need (Strong\'s H2637)' }
+                ]
+            },
+            'proverbs 3:5-6': {
+                kjv: 'Trust in the LORD with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths.',
+                nkjv: 'Trust in the LORD with all your heart, And lean not on your own understanding; In all your ways acknowledge Him, And He shall direct your paths.',
+                reference: 'Proverbs 3:5-6',
+                words: [
+                    { original: 'בָּטַח', transliteration: 'batach', definition: 'To trust, be confident, secure; to put confidence in (Strong\'s H982)' },
+                    { original: 'לֵב', transliteration: 'leb', definition: 'Heart; inner man, mind, will, understanding (Strong\'s H3820)' },
+                    { original: 'יָשַׁר', transliteration: 'yashar', definition: 'To be straight, right, direct; to make level or smooth (Strong\'s H3474)' }
+                ]
+            },
+            'philippians 4:13': {
+                kjv: 'I can do all things through Christ which strengtheneth me.',
+                nkjv: 'I can do all things through Christ who strengthens me.',
+                reference: 'Philippians 4:13',
+                words: [
+                    { original: 'ἰσχύω', transliteration: 'ischuō', definition: 'To have strength, be strong, be able; to be powerful (Strong\'s G2480)' },
+                    { original: 'ἐνδυναμόω', transliteration: 'endunamoō', definition: 'To strengthen, make strong, empower; to fill with power (Strong\'s G1743)' },
+                    { original: 'Χριστός', transliteration: 'Christos', definition: 'Christ, Messiah; the Anointed One (Strong\'s G5547)' }
+                ]
+            },
+            'romans 8:28': {
+                kjv: 'And we know that all things work together for good to them that love God, to them who are the called according to his purpose.',
+                nkjv: 'And we know that all things work together for good to those who love God, to those who are the called according to His purpose.',
+                reference: 'Romans 8:28',
+                words: [
+                    { original: 'συνεργέω', transliteration: 'sunergeō', definition: 'To work together, cooperate; to be a fellow worker (Strong\'s G4903)' },
+                    { original: 'ἀγαθός', transliteration: 'agathos', definition: 'Good, beneficial, excellent; morally good (Strong\'s G18)' },
+                    { original: 'πρόθεσις', transliteration: 'prothesis', definition: 'Purpose, plan, intention; predetermined counsel (Strong\'s G4286)' }
+                ]
+            }
+        };
+
+        let currentTranslation = 'KJV';
+        let currentVerse = null;
+
+        function searchVerse() {
+            const input = document.getElementById('verseInput').value.trim().toLowerCase();
+            const resultsCard = document.getElementById('resultsCard');
+            const verseDisplay = document.getElementById('verseDisplay');
+            const wordStudy = document.getElementById('wordStudy');
+
+            if (!input) {
+                alert('Please enter a verse reference!');
+                return;
+            }
+
+            currentVerse = sampleVerses[input];
+
+            if (currentVerse) {
+                displayVerse();
+                resultsCard.style.display = 'block';
+                resultsCard.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                verseDisplay.innerHTML = `
+                    <div class="error-message">
+                        ⚠️ Verse not found in sample database. Try one of the example verses above!<br>
+                        <small style="margin-top: 10px; display: block;">In the full version, this will connect to a complete Bible API.</small>
+                    </div>
+                `;
+                wordStudy.innerHTML = '';
+                resultsCard.style.display = 'block';
+                resultsCard.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function displayVerse() {
+            const verseDisplay = document.getElementById('verseDisplay');
+            const wordStudy = document.getElementById('wordStudy');
+
+            const verseText = currentTranslation === 'KJV' ? currentVerse.kjv : currentVerse.nkjv;
+
+            verseDisplay.innerHTML = `
+                <div class="verse-display">
+                    <div class="verse-text">${verseText}</div>
+                    <div class="verse-reference">— ${currentVerse.reference} (${currentTranslation})</div>
+                </div>
+            `;
+
+            wordStudy.innerHTML = currentVerse.words.map(word => `
+                <div class="word-item">
+                    <div class="word-original">${word.original}</div>
+                    <div class="word-transliteration">${word.transliteration}</div>
+                    <div class="word-definition">${word.definition}</div>
+                </div>
+            `).join('');
+        }
+
+        function switchTranslation(translation) {
+            currentTranslation = translation;
+
+            document.querySelectorAll('.translation-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            if (currentVerse) {
+                displayVerse();
+            }
+        }
+
+        function fillExample(verse) {
+            document.getElementById('verseInput').value = verse;
+            searchVerse();
+        }
+
+        function copyVerse() {
+            if (!currentVerse) return;
+
+            const verseText = currentTranslation === 'KJV' ? currentVerse.kjv : currentVerse.nkjv;
+            const fullText = `"${verseText}" — ${currentVerse.reference} (${currentTranslation})`;
+
+            navigator.clipboard.writeText(fullText).then(() => {
+                alert('✓ Verse copied to clipboard!');
+            });
+        }
+
+        function addToGoals() {
+            if (!currentVerse) return;
+            alert(`This will add ${currentVerse.reference} to your goals page!\n\n(Feature coming soon - will integrate with goals.html)`);
+        }
+
+        function searchAnother() {
+            document.getElementById('verseInput').value = '';
+            document.getElementById('verseInput').focus();
+        }
+    </script>
+</body>
+
+</html>
