@@ -123,7 +123,15 @@
                 return;
             }
 
+            const email = localStorage.getItem('userEmail');
+
+            // Save username
             localStorage.setItem('userName', username);
+
+            // Save that username is set for this email
+            const usernameMap = JSON.parse(localStorage.getItem('usernameMap')) || {};
+            usernameMap[email] = username;
+            localStorage.setItem('usernameMap', JSON.stringify(usernameMap));
             localStorage.setItem('usernameSet', 'true');
 
             window.location.href = 'dashboard.html';
